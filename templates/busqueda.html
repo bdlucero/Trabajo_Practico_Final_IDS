@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>SkillMatch UBA — Buscar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Fuente -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/skillmatch_v2.css') }}">
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="{{ url_for('buscar') }}"><span>SkillMatch</span> UBA</a>
+      <nav class="nav">
+        <a href="{{ url_for('buscar') }}">Buscar</a>
+        <a href="#">Subir</a>
+        <a href="#">Perfil</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1><span class="mark">Buscá</span> materiales</h1>
+      <p class="lead">Apuntes, parciales resueltos, enlaces y más. Filtrá por materias, tipo y formato.</p>
+
+      <form id="searchForm" class="searchbar" role="search">
+        <div class="input-wrap">
+          <input id="q" name="q" type="search" placeholder="Ej: parcial análisis | apunte álgebra | final algoritmos" aria-label="Buscar" autocomplete="off">
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- App root: paso URL de API via data-* -->
+ <main id="app"
+      class="container layout"
+      data-api-url="{{ backend_url }}/api/publicaciones">
+    <!-- FILTROS -->
+    <aside class="filters" aria-label="Filtros">
+      <form id="filtersForm">
+        <fieldset>
+          <legend>Materias <small class="muted materias-counter" aria-live="polite"></small></legend>
+          <div class="input-with-icon">
+            <input id="materiaFilter" type="text" placeholder="Filtrar materias…" autocomplete="off">
+            <span class="icon">🔎</span>
+          </div>
+          <div id="materiasList" class="checklist" role="group" aria-label="Materias">
+            {% for m in materias %}
+            <label data-name="{{ m.nombre|lower }}">
+              <input class="ck" type="checkbox" name="materias" value="{{ m.id }}">
+              <span class="ckbox"></span>
+              <span class="cklabel">{{ m.nombre }}</span>
+            </label>
+            {% endfor %}
+          </div>
+          <div class="filter-actions">
+            <button type="button" class="btn btn-ghost" data-action="all">Seleccionar todo</button>
+            <button type="button" class="btn btn-ghost" data-action="none">Limpiar</button>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Tipo</legend>
+          <div id="tipoList" class="checklist tiny"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Formato</legend>
+          <div id="formatoList" class="checklist tiny"></div>
+        </fieldset>
+
+        <div class="filter-footer">
+          <button type="submit" class="btn btn-primary">Aplicar filtros</button>
+          <button type="button" id="clearFilters" class="btn btn-ghost">Limpiar filtros</button>
+        </div>
+      </form>
+    </aside>
+
+    <!-- RESULTADOS -->
+    <section class="results">
+      <div class="results-bar">
+        <div id="resultsCount" aria-live="polite">Sin resultados aún</div>
+        <div class="bar-actions">
+          <label class="select">
+            <span>Ordenar</span>
+            <select id="sort" name="sort">
+              <option value="-fecha">Más nuevos</option>
+              <option value="-comentarios">Más comentados</option>
+              <option value="-rating">Mejor valorados</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <!-- Chips -->
+      <div id="chips" class="chips" aria-live="polite"></div>
+
+      <!-- Empty state (se muestra mientras no hay búsqueda o no llegaron datos) -->
+      <section id="empty" class="empty-state">
+        <div class="holo">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+        <h2>Empezá una búsqueda</h2>
+        <p>Usá la barra y los filtros para ver publicaciones. Cuando haya resultados, van a aparecer acá.</p>
+      </section>
+
+      <!-- Grid -->
+      <ul id="grid" class="cards" hidden></ul>
+
+      <!-- Paginación -->
+      <nav id="pagination" class="pagination" aria-label="Paginación" hidden></nav>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>© {{ 2025 }} SkillMatch UBA — Proyecto académico</div>
+      <div class="footer-links">
+        <a href="#">Términos</a>
+        <a href="#">Privacidad</a>
+        <a href="#">Contacto</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- JS -->
+  <script defer src="{{ url_for('static', filename='js/skillmatch_v2.js') }}"></script>
+</body>
+</html>
