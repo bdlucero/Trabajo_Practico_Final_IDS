@@ -184,3 +184,86 @@ select{
 @media (prefers-reduced-motion: reduce){
   body::before, body::after, .empty-state .dot{animation:none}
 }
+
+/* ======== FORMULARIO DE REGISTRO (nuevo) ======== */
+
+.registro-container {
+  max-width: 420px;
+  margin: 4rem auto;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.registro-container h1 {
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  color: #eaf1ff;
+}
+
+.registro-container p {
+  color: var(--muted);
+  margin-bottom: 1.8rem;
+}
+
+#googleSignIn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  color: #0a1020;
+  border: none;
+  border-radius: 12px;
+  padding: .8rem 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter .2s ease;
+}
+
+#googleSignIn:hover {
+  filter: brightness(1.1);
+}
+
+#legajoForm {
+  display: none;
+  margin-top: 1.5rem;
+  text-align: left;
+}
+
+#legajoForm label {
+  display: block;
+  margin-bottom: .5rem;
+  font-weight: 600;
+  color: #cfd9ff;
+}
+
+#legajoForm input {
+  width: 100%;
+  padding: .7rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--glass);
+  color: #eaf1ff;
+  outline: none;
+  margin-bottom: 1.2rem;
+}
+
+#legajoForm button {
+  width: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  color: #0a1020;
+  border: none;
+  border-radius: 10px;
+  padding: .8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter .2s ease;
+}
+
+#legajoForm button:hover {
+  filter: brightness(1.1);
+}

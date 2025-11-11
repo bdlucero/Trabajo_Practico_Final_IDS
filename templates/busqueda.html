@@ -19,6 +19,11 @@
         <a href="{{ url_for('buscar') }}">Buscar</a>
         <a href="#">Subir</a>
         <a href="#">Perfil</a>
+        {% if user %}
+          <a href="{{ url_for('logout') }}">Cerrar sesión ({{ user.nombre }})</a>
+        {% else %}
+          <a href="{{ url_for('registro') }}">Registro</a>
+        {% endif %}
       </nav>
     </div>
   </header>
@@ -27,7 +32,12 @@
   <section class="hero">
     <div class="container">
       <h1><span class="mark">Buscá</span> materiales</h1>
-      <p class="lead">Apuntes, parciales resueltos, enlaces y más. Filtrá por materias, tipo y formato.</p>
+
+      {% if user %}
+        <p class="lead">Bienvenido, {{ user.nombre }} — buscá apuntes, parciales y más.</p>
+      {% else %}
+        <p class="lead">Apuntes, parciales resueltos, enlaces y más. Filtrá por materias, tipo y formato.</p>
+      {% endif %}
 
       <form id="searchForm" class="searchbar" role="search">
         <div class="input-wrap">
