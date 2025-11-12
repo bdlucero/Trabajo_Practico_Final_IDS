@@ -1,3 +1,124 @@
+
+/*    INICIO NAVBAR    */
+.navbar {
+    background-color:rgb(33, 33, 202);
+    padding: 1rem 0;
+    display: flex; 
+    justify-content: center;  
+}
+
+.navbar-list {
+    background-color:rgb(33, 33, 202);
+    list-style: none;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;     
+    margin: 0;
+    padding: 0;
+    border-radius: none;
+    border:none;
+}
+
+.navbar-list li {
+    margin: 0 1.3rem;
+    background-color:rgb(33, 33, 202); 
+    padding:0px; 
+}
+
+.navbar-list a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold; 
+    background-color:rgb(33, 33, 202);
+    border-radius: none;
+    border:none;
+    font-size: 16px; 
+}
+
+nav  .navbar-list  li .skillmatch{
+    width:20px;    
+    color:lightblue;
+    text-align:center;
+    background-color:rgb(33, 33, 202);
+    font-weight: bold; 
+    font-size: 30px;  
+    border:none;
+    margin-right: 120px;
+    margin-left: 0px;
+    flex-direction: center; 
+    justify-content: center; 
+    align-items: center; 
+    
+}
+/*
+
+.navbar-list .listas:hover  { 
+    background-color:rgb(109, 197, 231);
+    border: 1px solid black; 
+    border-radius: 6px; 
+    color: black;
+}
+
+.navbar-list .listas:hover  a  {
+    color: black;
+    text-decoration: none;
+    font-weight: bold; 
+    background-color:rgb(109, 197, 231); 
+
+}*/
+
+.navbar-list .listas a:hover  {
+    color:lightblue;
+
+}
+
+/*   FIN NAVBAR    */
+
+
+/*   INICIO HEADER    */
+header { 
+    width:100%;
+    height:auto;
+    border-radius:8px;
+}
+ 
+/*   FIN HEADER    */
+
+
+/*    INICIO FOOTER    */
+footer {
+    width:100%;
+    height: auto;
+    background:rgb(23, 23, 189);
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0.5rem 0;
+}
+
+footer .sp{
+    background:rgb(5, 5, 61);
+    margin: 0 0.5rem;
+}
+
+
+footer .sp p {
+    color:white;
+    background: rgb(23, 23, 189);
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    font-weight: bold; 
+    font-size:16px;
+}
+ 
+/*   FIN FOOTER    */
+
 :root{
   /* Paleta vibrante (azules/violáceos) */
   --ink: #0b1424;
@@ -266,4 +387,342 @@ select{
 
 #legajoForm button:hover {
   filter: brightness(1.1);
+}
+
+.titulo_presentacion {
+  font-family: "Cinzel", serif; 
+  color:#f6f5f1; 
+  margin-top: 30px; 
+  font-weight: 900; 
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+#asignatura {
+  padding: 10px; 
+  background-color: #fbfafa; 
+  color: #010101; 
+  font-family: "Cinzel", serif; 
+  border-radius: 10px; 
+  font-weight: bold; 
+  width: 30%; 
+  margin: 0px 30%;
+}
+
+#formulario{
+  font-family: "Cinzel", serif; 
+  color:#14357d; 
+  margin-top: 30px; 
+  font-weight: 900; 
+  text-align: center; 
+  margin-bottom: 30px;
+}
+
+#formulario_resena{
+  font-family: "Cinzel", serif; 
+  color:#f3f5f9; 
+  margin-top: 30px; 
+  font-weight: 900; 
+  text-align: center; 
+  margin-bottom: 30px;
+}
+
+#formulario_resena label{
+  margin-bottom: 0px; 
+  font-family: "Cinzel", serif; 
+  font-weight: bold;
+}
+
+#formulario_resena form label{
+  margin-top: 15px;
+}
+
+#formulario_resena input, textarea{
+  width: 400px;
+}
+
+.header {
+  width: 100%; 
+  align-items: center; 
+  padding: 10px 20px; 
+  background-color: #f1f1f1; 
+  border-bottom: 1px solid #e5e5e5; 
+  margin-top: 0px;
+}
+
+.header {
+  background-color:#14357d;
+}
+
+#titulo_ventana{
+  padding-top: 0px; 
+  font-family: "Cinzel", serif; 
+  margin-top: 30px; 
+  font-weight: 500; 
+  font-size:large; 
+  color:#fdf2d4;
+}
+
+#boton_resenas {
+  padding: 10px; 
+  background-color: #b4b2b2; 
+  color: #f9f7f5; 
+  font-family: "Cinzel", serif; 
+  border-radius: 10px; 
+  font-weight: bold; 
+  width: 10%; 
+  margin: 0px 30%;
+}
+
+#boton_buscar {
+  padding: 10px; 
+  background-color: #b4b2b2; 
+  color: #f9f7f5; 
+  font-family: "Cinzel", serif; 
+  border-radius: 10px; font-weight: bold; width: 10%; margin: 0px 30%}
+
+button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:hover{
+  background-color: #05a542; 
+  color: #ffffff;
+}
+
+.valoracion_resena{
+  justify-content: space-between;
+}
+
+.star-rating {
+  direction: rtl; 
+  padding: 5px; 
+  text-align: center;
+}
+
+.star-rating input[type=radio], .star-rating-template input[type=radio]{ 
+  display: none;
+}
+
+.star-rating label, .star-rating-template label{
+  color: #bbb; 
+  font-size: 30px; 
+  padding: 0 0px; 
+  cursor: pointer; 
+  transition: color 0.3s; 
+  margin-bottom: 0px;
+}
+
+.star-rating input[type=radio]:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: #f2b600;
+}
+/* ======== TEMPLATE PUBLICACIONES(nuevo) ======== */
+
+.titulo_presentacion {
+  font-family: "Cinzel", serif;
+  color:#f6f5f1;
+  margin-top: 30px;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+
+#formulario{
+  font-family: "Cinzel", serif;
+  color:#14357d;
+  margin-top: 30px;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 30px;
+
+}
+#open-modal {
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.modal{
+  top:0;
+  bottom: 0;
+  left:0;
+  right: 0;
+}
+  
+#modal_formulario{
+  font-family: "Cinzel", serif;
+  color:#14357d;
+  margin-top: 30px;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 30px;
+
+  /*width: fit-content;
+  height: fit-content;
+  margin: auto;*/
+}
+
+#modal .modal-content {
+  background: #fdf2d4;
+  margin: auto;
+  padding: 0;
+  width: 60%;
+  border: 1px solid #888;
+  max-height: 80vh; 
+  overflow: auto;
+}
+
+.modal-header {
+  /*display: block;
+  
+  /*justify-content: space-between;*/
+  
+  align-items: center;
+  text-align: center; 
+  padding: 10px 20px;
+  background-color: #f1f1f1;
+  border-bottom: 1px solid #e5e5e5;
+  margin-top: 0px;
+  
+}
+
+#modal .modal-header h2 {
+  margin: 0;
+}
+.modal-header{
+  background-color:#14357d;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+}
+
+#modal .modal-body {
+  padding: 20px;
+}
+
+
+#titulo_ventana_modal { 
+  padding-top: 0px;
+  font-family: "Cinzel", serif;
+  font-weight: 500;
+  font-size:large;
+  text-align: center;  
+  color:#fdf2d4;
+}
+
+
+#disparador_modal,#disparador_formulario{
+  cursor: pointer;
+  text-decoration: underline;
+  font-size:medium;
+}
+
+#disparador_modal:hover,#disparador_formulario:hover{
+  font-weight: bold;
+  color: black;
+}
+.titulo_formulario {
+  padding: 5px;
+  font-family: "Cinzel", serif;
+  font-weight: 500;
+  font-size:large;
+  text-align: center;  
+  color:#fdf2d4;
+  margin: 0;
+}
+
+.boton-envio {
+  margin-top: 25px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.boton-envio:hover {
+  background-color: #45a049;
+}
+.boton-envio:active {
+  background-color: #3e8e41;
+}
+/*-- ======== CSS Template home.html ======== */
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.pulse-on-hover:hover {
+  animation: pulse 0.6s ease;
+}
+
+.rotate-on-hover:hover {
+  animation: rotate 0.6s ease;
+}
+.scalex {
+  transition: transform 0.3s ease;
+}
+.scalex:hover {
+  transform: scaleX(1.05);
+}
+.confirmacion-linea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  color: white;
+}
+
+.card2 {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-color: rgba(130,170,255,.35);
+  border-radius: 18px;
+  padding: 1rem;
+  box-shadow: var(--shadow);
+  transition: transform .1s ease, border-color .2s ease;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 160px;
+}
+
+.card3 {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-color: rgba(130,170,255,.35);
+  border-radius: 18px;
+  padding: 1rem;
+  box-shadow: var(--shadow);
+  transition: transform .1s ease, border-color .2s ease;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 160px;
+}
+
+.card2:hover {
+  transform: translateY(-2px);
+}
+
+.scalex:hover {
+  transform: scaleX(1.05);
+}
+
+.card3:hover {
+  transform: scaleX(1.05);
 }

@@ -10,9 +10,35 @@ GOOGLE_CLIENT_ID = "469004002801-logurlhvbb0e682h0rfesar7vtl6f0o0.apps.googleuse
 
 # ===== RUTAS =====
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error404.html'),404
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('error500.html'),500
+
 @app.route("/")
 def home():
-    return redirect(url_for("buscar"))
+    usuario = {"nombre": "Usuario"}
+    estadisticas = [
+        {"valor": "+1200", "descripcion": "Ofertas publicadas"},
+        {"valor": "+800", "descripcion": "Estudiantes registrados"},
+        {"valor": "+300", "descripcion": "Reseñas de materias"},
+    ]
+    resenas = obtener_ultimas_resenas()
+    return render_template("home.html",
+                           usuario=usuario,
+                           estadisticas=estadisticas,
+                           resenas=resenas)
+
+def obtener_ultimas_resenas():
+    return [
+        {"materia": "Álgebra I", "comentario": "Muy buen enfoque del profe", "autor": "Lucía"},
+        {"materia": "Física II", "comentario": "Explicaciones claras pero parciales exigentes", "autor": "Tomás"},
+        {"materia": "Análisis Matemático", "comentario": "Excelente material complementario", "autor": "Sofía"},
+    ]
+
 
 @app.route("/buscar")
 def buscar():
@@ -44,6 +70,14 @@ def registro():
 def logout():
     session.clear()
     return redirect(url_for("buscar"))
+
+@app.route("/resenas")
+def resenas():
+    return render_template("resenas.html")
+
+@app.route('/publicaciones')
+def publicaciones():
+    return render_template('publicaciones.html')
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
