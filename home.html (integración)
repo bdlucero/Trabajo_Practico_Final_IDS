@@ -1,0 +1,23 @@
+Se integra el template home.html con sus respectivas modificaciones en static/css/skillmatch_v2.css y la adición del static/js/home.js
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   README.md
+#	modified:   app.py
+#	modified:   static/css/skillmatch_v2.css
+#	new file:   static/js/aviso_resenas.js
+#	new file:   static/js/home.js
+#	new file:   static/js/resenas.js
+#	new file:   templates/base.html
+#	modified:   templates/busqueda.html
+#	new file:   templates/error404.html
+#	new file:   templates/error500.html
+#	new file:   templates/home.html
+#	new file:   templates/publicaciones.html
+#	modified:   templates/registro.html
+#	new file:   templates/resenas.html
+#

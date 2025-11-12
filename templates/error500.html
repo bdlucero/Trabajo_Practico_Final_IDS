@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block body %}  
+{% block contenido %}  
 
 <div id="contacto_titulo">
     <h1>500 Internal Server Error</h1>
@@ -7,6 +7,6 @@
     <h3>Disculpe las molestias</h3>
 </div>
 
-<a href="/"><button div id="boton_error">Volver al Inicio</button></a>
+<a href="{{ url_for('/') }}"> <button div id="boton_error">Volver al Inicio</button></a>
 
 {% endblock %}

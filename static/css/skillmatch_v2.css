@@ -1,3 +1,127 @@
+ 
+
+/*    INICIO NAVBAR    */
+.navbar {
+    background-color:rgb(33, 33, 202);
+    padding: 1rem 0;
+    display: flex; 
+    justify-content: center;  
+}
+
+
+
+.navbar-list {
+    background-color:rgb(33, 33, 202);
+    list-style: none;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;     
+    margin: 0;
+    padding: 0;
+    border-radius: none;
+    border:none;
+}
+
+.navbar-list li {
+    margin: 0 1.3rem;
+    background-color:rgb(33, 33, 202); 
+    padding:0px; 
+}
+
+.navbar-list a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold; 
+    background-color:rgb(33, 33, 202);
+    border-radius: none;
+    border:none;
+    font-size: 16px; 
+}
+
+nav  .navbar-list  li .skillmatch{
+    width:20px;    
+    color:lightblue;
+    text-align:center;
+    background-color:rgb(33, 33, 202);
+    font-weight: bold; 
+    font-size: 30px;  
+    border:none;
+    margin-right: 120px;
+    margin-left: 0px;
+    flex-direction: center; 
+    justify-content: center; 
+    align-items: center; 
+    
+}
+/*
+
+.navbar-list .listas:hover  { 
+    background-color:rgb(109, 197, 231);
+    border: 1px solid black; 
+    border-radius: 6px; 
+    color: black;
+}
+
+.navbar-list .listas:hover  a  {
+    color: black;
+    text-decoration: none;
+    font-weight: bold; 
+    background-color:rgb(109, 197, 231); 
+
+}*/
+
+.navbar-list .listas a:hover  {
+    color:lightblue;
+
+}
+
+/*   FIN NAVBAR    */
+
+
+/*   INICIO HEADER    */
+header { 
+    width:100%;
+    height:auto;
+    border-radius:8px;
+}
+ 
+/*   FIN HEADER    */
+
+
+/*    INICIO FOOTER    */
+footer {
+    width:100%;
+    height: auto;
+    background:rgb(23, 23, 189);
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0.5rem 0;
+}
+
+footer .sp{
+    background:rgb(23, 23, 189);
+    margin: 0 0.5rem;
+}
+
+
+footer .sp p {
+    color:white;
+    background: rgb(23, 23, 189);
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    font-weight: bold; 
+    font-size:16px;
+}
+ 
+/*   FIN FOOTER    */
+
 :root{
   /* Paleta vibrante (azules/violáceos) */
   --ink: #0b1424;

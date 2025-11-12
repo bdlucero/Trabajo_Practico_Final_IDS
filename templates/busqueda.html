@@ -1,43 +1,24 @@
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <title>SkillMatch UBA — Buscar</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Fuente -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <!-- CSS -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/skillmatch_v2.css') }}">
-</head>
-<body>
-  <!-- Header -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="{{ url_for('buscar') }}"><span>SkillMatch</span> UBA</a>
-      <nav class="nav">
-        <a href="{{ url_for('buscar') }}">Buscar</a>
-        <a href="#">Subir</a>
-        <a href="#">Perfil</a>
-        {% if user %}
-          <a href="{{ url_for('logout') }}">Cerrar sesión ({{ user.nombre }})</a>
-        {% else %}
-          <a href="{{ url_for('registro') }}">Registro</a>
-        {% endif %}
-      </nav>
-    </div>
-  </header>
+{% extends 'base.html' %}
 
+{% block contenido %}
+    <!-- Header 
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="{{ url_for('home') }}"><span>SkillMatch</span> UBA</a>
+            <nav class="nav">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('buscar') }}">Buscar</a>
+                <a href="#">Aportes</a>
+                <a href="#">Resenas</a>
+                <a href="#">Iniciar Sesión</a>
+            </nav>
+        </div>
+    </header> -->
   <!-- Hero -->
   <section class="hero">
     <div class="container">
       <h1><span class="mark">Buscá</span> materiales</h1>
-
-      {% if user %}
-        <p class="lead">Bienvenido, {{ user.nombre }} — buscá apuntes, parciales y más.</p>
-      {% else %}
-        <p class="lead">Apuntes, parciales resueltos, enlaces y más. Filtrá por materias, tipo y formato.</p>
-      {% endif %}
+      <p class="lead">Apuntes, parciales resueltos, enlaces y más. Filtrá por materias, tipo y formato.</p>
 
       <form id="searchForm" class="searchbar" role="search">
         <div class="input-wrap">
@@ -126,24 +107,23 @@
 
       <!-- Paginación -->
       <nav id="pagination" class="pagination" aria-label="Paginación" hidden></nav>
+ 
     </section>
-  </main>
 
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div>© {{ 2025 }} SkillMatch UBA — Proyecto académico</div>
-      <div class="footer-links">
-        <a href="#">Términos</a>
-        <a href="#">Privacidad</a>
-        <a href="#">Contacto</a>
-      </div>
-    </div>
-  </footer>
+  </main>
+  
+  <br> 
+
+
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  
+  <br> 
 
   <!-- JS -->
+  
   <script defer src="{{ url_for('static', filename='js/skillmatch_v2.js') }}"></script>
+  <br>
+  {% endblock %}
 </body>
 </html>
