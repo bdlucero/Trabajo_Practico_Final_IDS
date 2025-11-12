@@ -20,16 +20,34 @@ def page_not_found(e):
 
 @app.route("/")
 def home():
-    return redirect(url_for("buscar"))
+    usuario = {"nombre": "Usuario"}
+    estadisticas = [
+        {"valor": "+1200", "descripcion": "Ofertas publicadas"},
+        {"valor": "+800", "descripcion": "Estudiantes registrados"},
+        {"valor": "+300", "descripcion": "Reseñas de materias"},
+    ]
+    resenas = obtener_ultimas_resenas()
+    return render_template("home.html",
+                        usuario=usuario,
+                        estadisticas=estadisticas,
+                        resenas=resenas)
+
+def obtener_ultimas_resenas():
+    return [
+        {"materia": "Álgebra I", "comentario": "Muy buen enfoque del profe", "autor": "Lucía"},
+        {"materia": "Física II", "comentario": "Explicaciones claras pero parciales exigentes", "autor": "Tomás"},
+        {"materia": "Análisis Matemático", "comentario": "Excelente material complementario", "autor": "Sofía"},
+    ]
+
 
 @app.route("/buscar")
 def buscar():
     materias = []
     user = session.get("user")  # recupera el usuario logueado
     return render_template("busqueda.html",
-                           materias=materias,
-                           backend_url=BACKEND_URL,
-                           user=user)
+                        materias=materias,
+                        backend_url=BACKEND_URL,
+                        user=user)
 
 @app.route("/registro", methods=["GET", "POST"])
 def registro():
@@ -39,8 +57,8 @@ def registro():
 
         if not legajo or not email:
             return render_template("registro.html",
-                                   google_client_id=GOOGLE_CLIENT_ID,
-                                   error="Debes ingresar tu legajo y usar una cuenta institucional.")
+                                google_client_id=GOOGLE_CLIENT_ID,
+                                error="Debes ingresar tu legajo y usar una cuenta institucional.")
 
         # Guarda el usuario en sesión
         session["user"] = {"nombre": email.split("@")[0], "email": email, "legajo": legajo}
@@ -53,14 +71,13 @@ def logout():
     session.clear()
     return redirect(url_for("buscar"))
 
-@app.route("/reseñas")
+@app.route("/resenas")
 def resenas():
     return render_template("resenas.html")
 
-
-@app.route("/publicaciones")
+@app.route('/publicaciones')
 def publicaciones():
-    return render_template("publicaciones.html")
+    return render_template('publicaciones.html')
 
-if __name__ == '__main__':
-    app.run("127.0.0.1", port=5001, debug=True)
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)
