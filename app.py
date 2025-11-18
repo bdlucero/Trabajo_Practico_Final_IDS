@@ -28,9 +28,9 @@ def home():
     ]
     resenas = obtener_ultimas_resenas()
     return render_template("home.html",
-                           usuario=usuario,
-                           estadisticas=estadisticas,
-                           resenas=resenas)
+                        usuario=usuario,
+                        estadisticas=estadisticas,
+                        resenas=resenas)
 
 def obtener_ultimas_resenas():
     return [
@@ -45,9 +45,9 @@ def buscar():
     materias = []
     user = session.get("user")  # recupera el usuario logueado
     return render_template("busqueda.html",
-                           materias=materias,
-                           backend_url=BACKEND_URL,
-                           user=user)
+                        materias=materias,
+                        backend_url=BACKEND_URL,
+                        user=user)
 
 @app.route("/registro", methods=["GET", "POST"])
 def registro():

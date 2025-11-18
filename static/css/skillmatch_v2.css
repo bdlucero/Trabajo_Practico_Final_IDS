@@ -648,6 +648,7 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
 .boton-envio:active {
   background-color: #3e8e41;
 }
+
 /*-- ======== CSS Template home.html ======== */
 
 @keyframes pulse {
@@ -668,12 +669,15 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
 .rotate-on-hover:hover {
   animation: rotate 0.6s ease;
 }
+
 .scalex {
   transition: transform 0.3s ease;
 }
+
 .scalex:hover {
   transform: scaleX(1.05);
 }
+
 .confirmacion-linea {
   display: flex;
   justify-content: space-between;
@@ -696,8 +700,9 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
 
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 160px;
+  justify-content: flex-start; /* 🔧 cambio clave */
+  min-height: auto;   
+  margin-bottom: 0; 
 }
 
 .card3 {
@@ -725,4 +730,16 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
 
 .card3:hover {
   transform: scaleX(1.05);
+}
+
+.card2 h4,
+.card2 p {
+  margin-bottom: 0.25rem;
+}
+
+#opciones-privacidad {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* 🔧 ajustado para eliminar espacio entre tarjetas */
+  margin-top: 0.5rem; /* 🔧 opcional: reduce salto al desplegar */
 }
