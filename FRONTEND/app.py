@@ -72,6 +72,77 @@ def buscar():
         backend_url=BACKEND_URL,
         user=user,
     )
+    
+@app.route("/registro", methods=["GET", "POST"])
+def registro():
+    if request.method == "POST":
+        form = request.form
+
+        nombre = (form.get("nombre"))
+        apellido = (form.get("apellido"))
+        legajo = (form.get("legajo") or "").strip()
+        email = (form.get("email") or "").strip()
+
+        # Validaciones del lado del front
+        if not nombre or not apellido or not legajo or not email:
+            return render_template(
+                "registro.html",
+                google_client_id=GOOGLE_CLIENT_ID,
+                error="Completá nombre, apellido, legajo y correo institucional.",
+            )
+
+        if not email.endswith("@fi.uba.ar"):
+            return render_template(
+                "registro.html",
+                google_client_id=GOOGLE_CLIENT_ID,
+                error="Solo se permiten correos institucionales (@fi.uba.ar).",
+            )
+
+        payload = {
+            "nombre": nombre,
+            "apellido": apellido,
+            "legajo": legajo,
+            "email": email,
+        }
+
+        try:
+            resp = requests.post(
+                f"{BACKEND_URL}/api/usuarios/registro",
+                json=payload,
+                timeout=5,
+            )
+        except requests.RequestException as e:
+            print("Error llamando al backend de registro:", e)
+            return render_template(
+                "registro.html",
+                google_client_id=GOOGLE_CLIENT_ID,
+                error="No se pudo registrar el usuario. Intentá de nuevo más tarde.",
+            )
+
+        if resp.status_code not in (200, 201):
+            print("Error en API de registro:", resp.status_code, resp.text)
+            return render_template(
+                "registro.html",
+                google_client_id=GOOGLE_CLIENT_ID,
+                error="No se pudo registrar el usuario. Intentá de nuevo más tarde.",
+            )
+
+        user_data = resp.json() or {}
+
+        # Guardar en sesión para usar en publicaciones, reseñas, home, etc.
+        session["user"] = {
+            "nombre": user_data.get("nombre") or nombre,
+            "apellido": user_data.get("apellido") or apellido,
+            "email": user_data.get("email") or email,
+            "legajo": str(user_data.get("legajo") or legajo),
+        }
+
+        
+        return redirect(url_for("home"))
+
+    
+    return render_template("registro.html", google_client_id=GOOGLE_CLIENT_ID)
+
 @app.route("/logout")
 def logout():
     session.clear()
