@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block contenido %}  
+
+    <div id="formulario" class="hidden">
+            <header class="header">
+                <h6 id="titulo_ventana">¿Querés dejar tu opinión?</h6>
+            </header>
+            <div id="resenas">
+                <div id="formulario_resena">
+                    <form action="{{ url_for('resenas')}}" method="post">
+                        <h6 class="titulo_formulario">Selecciona la asignatura</h6>
+                        <select name="asignatura" id="asignatura" required>
+                            <option value="" disabled selected hidden>Seleccionar asignatura</option>
+                            {% for m in materias %}
+                                <option value="{{ m.codigo }}">{{ m.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="nombre">Nombre y Apellido:</label>
+                        </br>
+                        <br>
+                        <input type="text" id="nombre" name="nombre" placeholder="  Ingrese su nombre" required>
+                        </br>
+                        <br>
+                        <label for="titulo_resena">Ingrese un título para su reseña:</label>
+                        </br>
+                        <br>
+                        <input type="text" id="titulo_resena" name="titulo_resena" placeholder="  Ingrese un titulo" required>
+                        </br>
+                        <br>
+                        <label for="contenido">Reseña:</label>
+                        </br>
+                        <br>
+                        <textarea id="resena" name="resena" rows="4" cols="50" required placeholder=" Su reseña sobre el curso"></textarea><br><br>
+                        </br>
+                        <label> Indique su valoración general:</label>
+                        <div class="star-rating estrellas_fromulario">
+                            <input type="radio" id="estrella5" name="satisfaccion" value="5"><label
+                                for="estrella5">★</label>
+                            <input type="radio" id="estrella4" name="satisfaccion" value="4"><label
+                                for="estrella4">★</label>
+                            <input type="radio" id="estrella3" name="satisfaccion" value="3"><label
+                                for="estrella3">★</label>
+                            <input type="radio" id="estrella2" name="satisfaccion" value="2"><label
+                                for="estrella2">★</label>
+                            <input type="radio" id="estrella1" name="satisfaccion" value="1"><label
+                                for="estrella1">★</label>
+                        </div>
+                        <button type="submit" id="boton_resenas"> Enviar reseña</button>
+                    </form>
+                </div>
+            </div>
+    </div>
+   
+<script src="{{ url_for('static', filename='/js/resenas.js') }}"></script>
+<script src="{{ url_for('static', filename='/js/aviso_resenas.js') }}"></script>
+{% endblock %}  

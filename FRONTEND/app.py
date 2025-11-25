@@ -77,9 +77,76 @@ def logout():
     session.clear()
     return redirect(url_for("buscar"))
 
-@app.route("/resenas")
+@app.route("/resenas", methods=["GET", "POST"])
 def resenas():
-    return render_template("resenas.html")
+    user = session.get("user")
+
+    materias = []
+    error = None
+    mensaje = None
+
+    try:
+        resp = requests.get(f"{BACKEND_URL}/api/materias", timeout=5)
+        resp.raise_for_status()
+        materias = resp.json()
+    except Exception as e:
+        print("Error al obtener materias del backend:", e)
+        error = "No se pudieron cargar las materias."
+
+    if request.method == "POST":
+        form = request.form
+
+        asignatura = (form.get("asignatura"))
+        nombre = (form.get("nombre"))
+        titulo_resena = (form.get("titulo_resena"))
+        resena_texto = (form.get("resena"))
+        satisfaccion = (form.get("satisfaccion"))
+
+        if not asignatura or not nombre or not resena_texto or not satisfaccion:
+            error = "Completá todos los campos obligatorios."
+        else:
+            comentario = f"{titulo_resena}\n{resena_texto}"
+
+            try:
+                puntuacion_int = int(satisfaccion)
+            except ValueError:
+                error = "La satisfacción debe ser un número entre 1 y 5."
+                return render_template(
+                    "resenas.html",
+                    materias=materias,
+                    user=user,
+                    error=error,
+                    mensaje=mensaje,
+                )
+
+            id_usuario = user.get("legajo")
+
+            info_resenas = {
+                "id_materia": asignatura,       
+                "comentario": comentario,
+                "puntuacion": puntuacion_int,
+                "id_usuario": id_usuario,      
+            }
+
+            try:
+                api_resp = requests.post(
+                    f"{BACKEND_URL}/api/resenas_cursos",
+                    json=info_resenas,
+                    timeout=10,
+                )
+
+            except requests.RequestException as e:
+                print("Error al llamar a /api/resenas_cursos:", e)
+                error = "No se pudo guardar la reseña."
+
+    return render_template(
+        "resenas.html",
+        materias=materias,
+        user=user,
+        error=error,
+        mensaje=mensaje,
+        api_resp=api_resp
+    )
 
 @app.route('/publicaciones')
 def publicaciones():
