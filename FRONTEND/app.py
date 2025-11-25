@@ -219,9 +219,73 @@ def resenas():
         api_resp=api_resp
     )
 
-@app.route('/publicaciones')
+@app.route('/publicaciones', methods=["GET", "POST"])
 def publicaciones():
-    return render_template('publicaciones.html')
+    
+    materias = []
+    try:
+        resp = requests.get(f"{BACKEND_URL}/api/materias", timeout=5)
+        resp.raise_for_status()
+        materias = resp.json()
+    except Exception as e:
+        print("Error al obtener materias del backend:", e)
+
+    if request.method == "POST":
+        form = request.form
+        file_obj = request.files.get("adjunto")
+
+        
+        data = {
+            
+            "asignatura": form.get("asignatura", "").strip(),
+            
+            "titulo_aporte": form.get("titulo_aporte", "").strip(),
+            
+            "aportes": form.get("aportes", "").strip(),
+            
+            "tipo_archivo": form.get("tipo_archivo", "").strip(),
+            
+            "url_repo": form.get("url_repo", "").strip(),
+            
+            "autor_nombre": session.get("user", {}).get("nombre", ""),
+            "autor_email": session.get("user", {}).get("email", ""),
+            "legajo_usuario": session.get("user", {}).get("legajo", ""),
+        }
+
+        files = {}
+        if file_obj and file_obj.filename:
+            files["adjunto"] = (
+                file_obj.filename,
+                file_obj.stream,
+                file_obj.mimetype or "application/octet-stream",
+            )
+
+        try:
+            resp = requests.post(
+                f"{BACKEND_URL}/api/publicaciones",
+                data=data,
+                files=files,
+                timeout=15,
+            )
+            resp.raise_for_status()
+            
+            return redirect(url_for("buscar"))
+        except requests.RequestException as e:
+            print("Error al crear publicación en backend:", e)
+            error = "No se pudo crear la publicación. Intentalo de nuevo."
+            return render_template(
+                "publicaciones.html",
+                API_URL=BACKEND_URL,
+                materias=materias,
+                error=error,
+            )
+
+    return render_template(
+        "publicaciones.html",
+        API_URL=BACKEND_URL,
+        materias=materias,
+    )
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
