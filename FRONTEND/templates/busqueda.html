@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+    
+  <section class="hero">
+    <div class="container">
+      <h1><span class="mark">Buscá</span> materiales</h1>
+          {% if user %}
+          <p class="lead">Bienvenido, {{ user.nombre }} — buscá apuntes, parciales y más.</p>
+          {% else %}
+         <p class="lead">Apuntes, parciales resueltos, enlaces y más. Filtrá por materias, tipo y formato.</p>
+          {% endif %}
+      <form id="searchForm" class="searchbar" role="search">
+        <div class="input-wrap">
+          <input id="q" name="q" type="search" placeholder="Ej: parcial análisis | apunte álgebra | final algoritmos" aria-label="Buscar" autocomplete="off">
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </form>
+    </div>
+  </section>
+
+  
+ <main id="app"
+      class="container layout"
+      data-api-url="{{ backend_url }}/api/publicaciones">
+    <!-- FILTROS -->
+    <aside class="filters" aria-label="Filtros">
+      <form id="filtersForm">
+        <fieldset>
+          <legend>Materias <small class="muted materias-counter" aria-live="polite"></small></legend>
+          <div class="input-with-icon">
+            <input id="materiaFilter" type="text" placeholder="Filtrar materias…" autocomplete="off">
+            <span class="icon">🔎</span>
+          </div>
+        <div id="materiasList" class="checklist" role="group" aria-label="Materias">
+          {% for m in materias %}
+          <label class="materia-item"
+              data-name="{{ m.nombre
+                | lower
+                | replace('á','a')
+                | replace('é','e')
+                | replace('í','i')
+                | replace('ó','o')
+                | replace('ú','u')
+                | replace('ü','u') }}">
+          <input class="ck" type="checkbox" name="materias" value="{{ m.codigo }}">
+          <span class="ckbox"></span>
+          <span class="cklabel">{{ m.nombre }}</span>
+          </label>
+          {% endfor %}
+        </div>
+          <div class="filter-actions">
+            <button type="button" class="btn btn-ghost" data-action="all">Seleccionar todo</button>
+            <button type="button" class="btn btn-ghost" data-action="none">Limpiar</button>
+          </div>
+        </fieldset>
+
+        {#
+          Filtro por formato del material (pdf, imagen, carpeta
+          comprimida, repositorio).  Se construye dinámicamente
+          en JS en el elemento con id "formatoList".
+        #}
+        <fieldset>
+          <legend>Formato</legend>
+          <div id="formatoList" class="checklist tiny"></div>
+        </fieldset>
+
+        <div class="filter-footer">
+          <button type="submit" class="btn btn-primary">Aplicar filtros</button>
+          <button type="button" id="clearFilters" class="btn btn-ghost">Limpiar filtros</button>
+        </div>
+      </form>
+    </aside>
+
+    <!-- RESULTADOS -->
+    <section class="results">
+      <div class="results-bar">
+        <div id="resultsCount" aria-live="polite">Sin resultados aún</div>
+        <div class="bar-actions">
+          <label class="select">
+            <span>Ordenar</span>
+            <select id="sort" name="sort">
+              <option value="-fecha">Más nuevos</option>
+              <option value="-comentarios">Más comentados</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <!-- Chips -->
+      <div id="chips" class="chips" aria-live="polite"></div>
+
+      <!-- mientras no hayan publicaciones para mostrar -->
+      <section id="empty" class="empty-state">
+        <div class="holo">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+        <h2>Empezá una búsqueda</h2>
+        <p>Usá la barra y los filtros para ver publicaciones. Cuando haya resultados, van a aparecer acá.</p>
+      </section>
+
+      <!-- Grid -->
+      <ul id="grid" class="cards" hidden></ul>
+
+      <!-- Paginación -->
+      <nav id="pagination" class="pagination" aria-label="Paginación" hidden></nav>
+ 
+    </section>
+
+  </main>
+  
+  <br> 
+
+
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  
+  <br> 
+
+  <!-- JS -->
+  
+  
+  <script defer src="{{ url_for('static', filename='js/busqueda.js') }}"></script>
+  <br>
+  {% endblock %}
+</body>
+</html>
