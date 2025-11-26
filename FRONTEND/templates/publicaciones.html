@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+<div id="formulario">
+    <header class="hero" style="text-align: center"; >
+        <h2 class="mark">Carga tu aporte en el siguiente formulario</h2>
+    </header>
+
+    <form id="publicacionesForm"
+          action="{{ url_for('publicaciones') }}"
+          method="post"
+          enctype="multipart/form-data">
+
+       
+        <h6 class="titulo_formulario">Selecciona la materia</h6>
+        <select name="asignatura" id="asignatura" required>
+            <option value="" disabled selected hidden>Seleccionar asignatura</option>
+            {% for m in materias %}
+                <option value="{{ m.codigo }}">{{ m.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+       
+        <h6 class="titulo_formulario">Ingresa el título del aporte</h6>
+        <textarea id="titulo_aporte"
+                  name="titulo_aporte"
+                  rows="2"
+                  cols="50"
+                  required
+                  placeholder="  Ingrese el título del aporte:"></textarea>
+
+        <br><br>
+
+        
+        <h6 class="titulo_formulario">Ingresa una descripción</h6>
+        <textarea id="aportes"
+                  name="aportes"
+                  rows="5"
+                  cols="50"
+                  required
+                  placeholder="  Ingrese la descripción de su aporte:"></textarea>
+
+        <br><br>
+
+      
+        <h6 class="titulo_formulario">Selecciona el formato del material</h6>
+        <select name="tipo_archivo" id="tipo_archivo" required>
+            <option value="" disabled selected hidden>Seleccionar formato</option>
+            <option value="pdf">PDF</option>
+            <option value="imagen">Imagen</option>
+            <option value="carpeta comprimida">Carpeta comprimida</option>
+            <option value="repositorio">Repositorio</option>
+        </select>
+
+        <br><br>
+
+        
+        <h6 class="titulo_formulario">Ingresa la URL de tu repositorio (opcional)</h6>
+        <textarea id="url_repo"
+                  name="url_repo"
+                  rows="2"
+                  cols="50"
+                  placeholder="  Ingrese la URL del repositorio o enlace (GitHub, Drive, etc.):"></textarea>
+
+        <br><br>
+
+        <h6 class="titulo_formulario">Adjunta los archivos que deseas compartir (opcional)</h6>
+        <input
+            class="boton-envio"
+            type="file"
+            id="adjunto"
+            name="adjunto">
+
+        <br><br>
+
+        <div>
+            <button class="boton-envio" type="submit">Enviar</button>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}

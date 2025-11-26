@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block contenido %}
+<br>
+<section class="hero">
+  <div class="container" style="max-width:480px">
+    <h1><span class="mark">Registro institucional</span></h1>
+    <p class="lead">Solo cuentas @fi.uba.ar. Ingresá tu legajo para continuar.</p>
+
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if registrado %}
+    <div id="registroExitoso">✅ ¡Registro exitoso! Bienvenido/a {{ nombre }}.</div>
+    {% endif %}
+
+    <form id="registroForm" method="POST" action="{{ url_for('registro') }}" class="card">
+      <label for="nombre">Nombre</label>
+      <input type="text" id="nombre" name="nombre" required placeholder="Ej: Juan">
+
+      <label for="apellido">Apellido</label>
+      <input type="text" id="apellido" name="apellido" required placeholder="Ej: Pérez">
+
+      <label for="legajo">Número de legajo</label>
+      <input type="text" id="legajo" name="legajo" required placeholder="Ej: 12345">
+
+      <label for="email">Email institucional</label>
+      <div id="g_id_onload"
+           data-client_id="{{ google_client_id }}"
+           data-callback="handleCredentialResponse">
+      </div>
+      <div class="g_id_signin"
+           data-type="standard"
+           data-shape="rectangular"
+           data-theme="outline"
+           data-text="sign_in_with"
+           data-size="large"
+           data-logo_alignment="left">
+      </div>
+
+      <input type="hidden" name="email" id="emailInput">
+    </form>
+
+    <p id="msg"></p>
+  </div>
+</section>
+
+<script src="{{ url_for('static', filename='js/registro.js') }}"></script>
+<br><br>
+{% endblock %}

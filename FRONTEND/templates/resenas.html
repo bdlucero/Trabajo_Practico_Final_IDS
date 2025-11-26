@@ -1,29 +1,6 @@
 {% extends "base.html" %}
 {% block contenido %}  
 
-
-    <h2 class="titulo_presentacion">Reseñas de asignaturas</h2>
-
-    <div id="formulario">
-        <header class="header">
-            <h6 id="titulo_ventana">¿Querés buscar reseñas de una asignatura?</h6>
-        </header>
-        <br>
-        <form id="asignaturaForm" action="{{ url_for('resenas') }}" method="post">
-            <select name="asignatura" id="asignatura" required>
-                <option value="" disabled selected hidden>Seleccionar asignatura</option>
-                <option value="Algebra"> Algebra </option>
-                <option value="Introducción al Desarrollo de Software"> Introducción al Desarrollo de Software </option>
-                <option value="Fundamentos de Programación"> Fundamentos de Programación </option>
-                <option value="Análisis Matemático II"> Análisis Matemático II </option>
-            </select>
-        </br>
-            <br>
-            <button type="submit" id="boton_buscar"> Buscar asignatura</button>
-            </br>
-        </form>
-        
-    </div>        
     <div id="formulario" class="hidden">
             <header class="header">
                 <h6 id="titulo_ventana">¿Querés dejar tu opinión?</h6>
@@ -31,6 +8,13 @@
             <div id="resenas">
                 <div id="formulario_resena">
                     <form action="{{ url_for('resenas')}}" method="post">
+                        <h6 class="titulo_formulario">Selecciona la asignatura</h6>
+                        <select name="asignatura" id="asignatura" required>
+                            <option value="" disabled selected hidden>Seleccionar asignatura</option>
+                            {% for m in materias %}
+                                <option value="{{ m.codigo }}">{{ m.nombre }}</option>
+                            {% endfor %}
+                        </select>
                         <label for="nombre">Nombre y Apellido:</label>
                         </br>
                         <br>

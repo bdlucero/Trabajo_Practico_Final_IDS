@@ -269,8 +269,12 @@ select{
 .badge{display:inline-block; border:1px solid var(--line); background:rgba(255,255,255,.06); border-radius:999px; padding:.12rem .55rem; font-size:.78rem}
 .tags{display:flex; gap:.4rem; flex-wrap:wrap; margin:.45rem 0}
 .desc{color:#d6e3ff}
-.actions{display:flex; gap:.6rem; margin-top:.75rem}
-
+.actions{
+  display:flex;
+  flex-wrap: wrap;      
+  gap:.6rem;
+  margin-top:.75rem;
+}
 /* Empty state (sin datos) */
 .empty-state{
   border:1px dashed var(--line); border-radius:18px; padding:2rem; text-align:center;
@@ -318,7 +322,95 @@ select{
   box-shadow: var(--shadow);
   text-align: center;
 }
+/* === Registro institucional === */
 
+.registro-formulario {
+  max-width: 480px;
+  margin: 3rem auto;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.registro-formulario h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #eaf1ff;
+}
+
+.registro-formulario p.lead {
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.registro-formulario label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #cfd9ff;
+}
+
+.registro-formulario input[type="text"],
+.registro-formulario input[type="email"] {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--glass);
+  color: #eaf1ff;
+  outline: none;
+  margin-bottom: 1.2rem;
+}
+
+.registro-formulario input::placeholder {
+  color: #9fb2e6;
+}
+
+.registro-formulario .error {
+  color: #ff6666;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+#registroExitoso {
+  background: #28a745;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+.perfil-usuario {
+  position: fixed;
+  top: 0;
+  right: 0;
+  background: rgba(8, 12, 24, 0.85);
+  color: #eaf1ff;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.9rem;
+  border-bottom-left-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+
+.perfil-usuario a {
+  color: #58a6ff;
+  margin-left: 1rem;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.perfil-usuario a:hover {
+  text-decoration: underline;
+}
+#msg {
+  margin-top: 1rem;
+  color: #aab7dc;
+  text-align: center;
+}
 .registro-container h1 {
   margin-bottom: 1rem;
   font-size: 1.8rem;
@@ -437,7 +529,8 @@ select{
   margin-top: 15px;
 }
 
-#formulario_resena input, textarea{
+#formulario_resena input,
+#formulario_resena textarea {
   width: 400px;
 }
 
@@ -648,6 +741,7 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
 .boton-envio:active {
   background-color: #3e8e41;
 }
+
 /*-- ======== CSS Template home.html ======== */
 
 @keyframes pulse {
@@ -668,12 +762,15 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
 .rotate-on-hover:hover {
   animation: rotate 0.6s ease;
 }
+
 .scalex {
   transition: transform 0.3s ease;
 }
+
 .scalex:hover {
   transform: scaleX(1.05);
 }
+
 .confirmacion-linea {
   display: flex;
   justify-content: space-between;
@@ -696,8 +793,9 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
 
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 160px;
+  justify-content: flex-start; /* 🔧 cambio clave */
+  min-height: auto;   
+  margin-bottom: 0; 
 }
 
 .card3 {
@@ -725,4 +823,96 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
 
 .card3:hover {
   transform: scaleX(1.05);
+}
+
+.card2 h4,
+.card2 p {
+  margin-bottom: 0.25rem;
+}
+
+#opciones-privacidad {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* 🔧 ajustado para eliminar espacio entre tarjetas */
+  margin-top: 0.5rem; /* 🔧 opcional: reduce salto al desplegar */
+}
+/* ======== Reseñas dentro de las cards de búsqueda ======== */
+
+
+.card .actions .btn{
+  flex: 0 0 auto;
+}
+
+
+
+.card .reviews-section {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.card .reviews-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card .reviews-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 180px;      /* opcional scroll interno */
+  overflow-y: auto;
+}
+
+.card .review-item {
+  background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+.card .review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+}
+
+.card .review-form textarea {
+  width: 100%;
+  max-width: 100%;
+  min-height: 70px;
+  resize: vertical;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--glass);
+  color: #eaf1ff;
+  padding: 0.4rem 0.5rem;
+  box-sizing: border-box;
+}
+
+.card .review-form .rating-row {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+
+.card .review-form select {
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.25rem 0.4rem;
+  color: #eaf1ff;
+  font-size: 0.9rem;
+}
+.card textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
