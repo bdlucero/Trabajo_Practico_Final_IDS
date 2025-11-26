@@ -1,7 +1,7 @@
 from flask import Flask, Blueprint
 from flask_cors import CORS
 from busqueda import busqueda_bp
-  
+from home import home_bp
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -10,9 +10,8 @@ def create_app() -> Flask:
     api_bp = Blueprint("api", __name__, url_prefix="/api")
 
     api_bp.register_blueprint(busqueda_bp)
+    api_bp.register_blueprint(home_bp)
     
-
-
     app.register_blueprint(api_bp)
 
     return app
