@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>SkillMatch UBA - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/skillmatch_v2.css') }}">
+    <script src="{{ url_for('static', filename='js/home.js') }}" defer></script>
+</head>
+
+<body>
+
+    <main>
+
+<section class="hero" style="text-align: center;">
+        <h1 class="mark">SkillMatch UBA</h1>
+        <p class="lead">Una plataforma colaborativa para conectar estudiantes de la UBA que ofrecen y buscan ayuda académica.</p>
+</section> 
+
+<section id="contenido-dinamico">
+    {% if usuario and usuario.nombre %}
+        <h2 class="lead">Bienvenido {{ usuario.nombre }}</h2>
+    {% else %}
+        <h2 class="lead">Bienvenido usuario</h2>
+    {% endif %}
+</section>
+
+<section class="info">
+        <h2>      ¿De qué trata SkillMatch UBA?</h2>
+        <p class="lead">SkillMatch UBA permite publicar ofertas de ayuda, buscar por asignatura, leer reseñas de cursos y contactar a otros estudiantes. Está pensada para fomentar el intercambio de conocimientos dentro de la comunidad universitaria.</p>
+</section>
+
+<section class="funcionalidades" style="margin: 3rem 0;">
+    <h2 style="text-align: center;">¿Qué podés hacer en SkillMatch UBA?</h2>
+    <div class="layout" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: 2rem;">
+
+        <div class="card2" style="width: 300px; text-align: center; padding: 1.5rem;">
+            <h3>   
+            <a href="{{ url_for('publicaciones') }}" style="text-decoration: none; color: inherit;">
+                    Publicar materiales
+                </a>     
+            </h3>           
+            <p class="desc">Subí apuntes, guías, consejos, resúmenes o ejercicios para que otros estudiantes puedan acceder fácilmente.</p>
+        </div>
+
+        <div class="card2" style="width: 300px; text-align: center; padding: 1.5rem;">
+            <h3>
+            <a href="{{ url_for('buscar') }}" style="text-decoration: none; color: inherit;">
+                    Recibir apoyo en materias específicas
+                </a>
+            </h3>
+            <p class="desc">Buscá ayuda personalizada en las materias que estás cursando, desde consultas teóricas hasta resolución de ejercicios.</p>
+        </div>
+
+        <div class="card2" style="width: 300px; text-align: center; padding: 1.5rem;">
+            <h3>  
+            <a href="{{ url_for('resenas') }}" style="text-decoration: none; color: inherit;">
+                    Publicar / Recibir reseñas
+                </a> 
+            </h3>
+            <p class="desc">Compartí tu experiencia con usuarios con los que te hayas relacionado y leé reseñas de otros estudiantes para elegir mejor.</p>
+        </div>
+    </div>
+</section>
+
+<section class="reseñas" style="text-align: center;">
+    <h3>Últimas reseñas de materias</h3>
+    <ul style="list-style: none; padding: 0; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+        {% for r in reseñas %}
+        <li class="card3 scalex" style="width: 280px;">
+            <!-- Título de la tarjeta = nombre de la materia -->
+            <h4>{{ r.nombre_materia }}</h4>
+
+            <!-- Dentro: título de reseña y texto separados -->
+            <p class="desc">
+                {% if r.titulo_resena %}
+                    <strong>{{ r.titulo_resena }}</strong><br>
+                {% endif %}
+                {{ r.texto_resena }}
+            </p>
+
+            <!-- Autor: por ahora siempre Anónimo -->
+            <span class="meta" style="display: block; text-align: right;">— Anónimo</span>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+
+<section class="stats" style="text-align: center;">
+    <h2>SkillMatch en números</h2>
+    <div class="layout" style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center">
+        {% for stat in estadisticas %}
+        <div class="card3" style="width: 200px; text-align: center;">
+            <h3>{{ stat.valor }}</h3>
+            <p class="desc">{{ stat.descripcion }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="privacidad">
+    <h2>Tu privacidad nos importa</h2>
+    <p class="desc">SkillMatch UBA respeta tus datos. Solo usamos información para mejorar tu experiencia.</p>
+
+    <div style="display: flex; justify-content: flex-end;">
+        <button class="btn btn-ghost" onclick="mostrarOpciones()">Ver más opciones</button>
+    </div>
+
+    <div id="opciones-privacidad" style="display: none; margin-top: 1rem;">
+        <div class="card2" id="bloque-navegacion" style="text-align: left; padding: 1rem;">
+        <h4> Datos de navegación</h4>
+        <p class="desc">Usamos tu actividad para mejorar las recomendaciones de materias, docentes y ayuda académica.</p>
+        <div style="display: flex; gap: 1rem;">
+            <button class="btn btn-ghost pulse-on-hover" onclick="confirmarBloque('bloque-navegacion', true)">Aceptar</button>
+            <button class="btn btn-ghost rotate-on-hover" onclick="confirmarBloque('bloque-navegacion', false)">Rechazar</button>
+        </div>
+        </div>
+
+        <div class="card2" id="bloque-preferencias" style="text-align: left; padding: 1rem;">
+        <h4> Preferencias académicas</h4>
+        <p class="desc">Guardamos las materias en las que tenés actividad para mostrarte contenido relevante.</p>
+        <div style="display: flex; gap: 1rem;">
+            <button class="btn btn-ghost pulse-on-hover" onclick="confirmarBloque('bloque-preferencias', true)">Aceptar</button>
+            <button class="btn btn-ghost rotate-on-hover" onclick="confirmarBloque('bloque-preferencias', false)">Rechazar</button>
+        </div>
+        </div>
+
+        <div class="card2" id="bloque-notificaciones" style="text-align: left; padding: 1rem;">
+        <h4> Notificaciones</h4>
+        <p class="desc">Podés recibir alertas sobre nuevas ofertas, reseñas o cambios en tus materias favoritas.</p>
+        <div style="display: flex; gap: 1rem;">
+            <button class="btn btn-ghost pulse-on-hover" onclick="confirmarBloque('bloque-notificaciones', true)">Aceptar</button>
+            <button class="btn btn-ghost rotate-on-hover" onclick="confirmarBloque('bloque-notificaciones', false)">Rechazar</button>
+        </div>
+        </div>
+    </div>
+
+</section>
+
+    </main>
+
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+
+    {% endblock %}
+</body>
+</html>

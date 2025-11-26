@@ -2,14 +2,12 @@ from flask import Flask, Response, abort, render_template, redirect, url_for, re
 import os, requests
 from functools import wraps
 
-
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
 #  CONFIGURACIÓN lOGUEO
 app.secret_key = "clave_super_secreta_para_sesiones"
 BACKEND_URL = os.environ.get("BACKEND_URL", "http://127.0.0.1:5050")
 GOOGLE_CLIENT_ID = "469004002801-logurlhvbb0e682h0rfesar7vtl6f0o0.apps.googleusercontent.com"
-
 
 def login_required(view_func):
     """Redirige a /registro si no hay usuario en sesión."""
@@ -19,7 +17,6 @@ def login_required(view_func):
             return redirect(url_for("registro"))
         return view_func(*args, **kwargs)
     return wrapped_view
-
 
 #  RUTAS 
 
@@ -33,25 +30,30 @@ def page_not_found(e):
 
 @app.route("/")
 def home():
-    usuario = {"nombre": "Usuario"}
-    estadisticas = [
-        {"valor": "+1200", "descripcion": "Ofertas publicadas"},
-        {"valor": "+800", "descripcion": "Estudiantes registrados"},
-        {"valor": "+300", "descripcion": "Reseñas de materias"},
-    ]
-    resenas = obtener_ultimas_resenas()
-    return render_template("home.html",
-                        usuario=usuario,
-                        estadisticas=estadisticas,
-                        resenas=resenas)
+    usuario = session.get("user") or {}
+    reseñas = []
+    estadisticas = []
 
-def obtener_ultimas_resenas():
-    return [
-        {"materia": "Álgebra I", "comentario": "Muy buen enfoque del profe", "autor": "Lucía"},
-        {"materia": "Física II", "comentario": "Explicaciones claras pero parciales exigentes", "autor": "Tomás"},
-        {"materia": "Análisis Matemático", "comentario": "Excelente material complementario", "autor": "Sofía"},
-    ]
+    try:
+        resp = requests.get(f"{BACKEND_URL}/api/home/resenas", timeout=5)
+        if resp.status_code == 200:
+            reseñas = resp.json()
+    except Exception as e:
+        print("Error al obtener reseñas del backend:", e)
 
+    try:
+        resp_stats = requests.get(f"{BACKEND_URL}/api/home/stats", timeout=5)
+        if resp_stats.status_code == 200:
+            estadisticas = resp_stats.json()
+    except Exception as e:
+        print("Error al obtener estadísticas del backend:", e)
+
+    return render_template(
+        "home.html",
+        usuario=usuario,
+        reseñas=reseñas,
+        estadisticas=estadisticas
+    )
 
 @app.route("/buscar", methods=["GET", "POST"])
 @login_required
