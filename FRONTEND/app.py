@@ -1,6 +1,7 @@
-from flask import Flask, render_template, redirect, url_for, request, session
+from flask import Flask, Response, abort, render_template, redirect, url_for, request, session
 import os, requests
 from functools import wraps
+
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
@@ -9,8 +10,6 @@ app.secret_key = "clave_super_secreta_para_sesiones"
 BACKEND_URL = os.environ.get("BACKEND_URL", "http://127.0.0.1:5050")
 GOOGLE_CLIENT_ID = "469004002801-logurlhvbb0e682h0rfesar7vtl6f0o0.apps.googleusercontent.com"
 
-
-# OBLIGAR A REGISTRARSE
 
 def login_required(view_func):
     """Redirige a /registro si no hay usuario en sesión."""
@@ -54,24 +53,180 @@ def obtener_ultimas_resenas():
     ]
 
 
-@app.route("/buscar")
+@app.route("/buscar", methods=["GET", "POST"])
 @login_required
 def buscar():
-    user = session.get("user")
+    user = session.get("user") 
+    #  guardar reseña 
+
+    if request.method == "POST":
+        pub_id = request.form.get("pub_id")
+        comentario = (request.form.get("comentario"))
+        calificacion = (request.form.get("calificacion"))
+
+        # Filtros 
+        q = (request.form.get("q"))
+        sort = (request.form.get("sort") or "-fecha")
+        page = request.form.get("page") or "1"
+        page_size = request.form.get("page_size") or "12"
+        materias_sel = request.form.getlist("materias")
+        formatos_sel = request.form.getlist("formato")
+
+        payload = {
+            "comentario": comentario,
+            "calificacion": calificacion,
+            "id_usuario": user.get("legajo"),
+        }
+
+        if pub_id:
+            try:
+                resp = requests.post(
+                    f"{BACKEND_URL}/api/publicaciones/{pub_id}/comentarios",
+                    json=payload,
+                    timeout=10,
+                )
+                if resp.status_code != 201:
+                    print("Error al crear reseña:", resp.status_code, resp.text)
+            except Exception as e:
+                print("Error al llamar al backend de reseñas:", e)
+
+        # vuelvo a buscar 
+        redirect_url = url_for(
+            "buscar",
+            q=q,
+            sort=sort,
+            page=page,
+            page_size=page_size,
+            materias=materias_sel,
+            formato=formatos_sel,
+        ) + (f"#pub-{pub_id}" if pub_id else "")
+        return redirect(redirect_url)
+
+    # mostrar búsqueda + reseñas
+
+    q = (request.args.get("q"))
+    sort = (request.args.get("sort") or "-fecha")
+
+    try:
+        page = max(int(request.args.get("page", 1)), 1)
+    except ValueError:
+        page = 1
+
+    try:
+        page_size = max(int(request.args.get("page_size", 12)), 1)
+    except ValueError:
+        page_size = 12
+
+    materias_sel = request.args.getlist("materias")
+    formatos_sel = request.args.getlist("formato")
+
+    # Materias 
     materias = []
     try:
-        resp = requests.get(f"{BACKEND_URL}/api/materias", timeout=5)
-        resp.raise_for_status()
-        materias = resp.json()
+        resp_m = requests.get(f"{BACKEND_URL}/api/materias", timeout=5)
+        resp_m.raise_for_status()
+        materias = resp_m.json()
     except Exception as e:
         print("Error al obtener materias del backend:", e)
 
+    # Parámetros 
+    api_params = {
+        "q": q,
+        "sort": sort,
+        "page": page,
+        "page_size": page_size,
+    }
+    for cod in materias_sel:
+        api_params.setdefault("materias", []).append(cod)
+    for fmt in formatos_sel:
+        api_params.setdefault("formato", []).append(fmt)
+
+    resultados = []
+    total = 0
+    pages = 1
+    error = None
+
+    try:
+        resp_pub = requests.get(
+            f"{BACKEND_URL}/api/publicaciones",
+            params=api_params,
+            timeout=10,
+        )
+        resp_pub.raise_for_status()
+        data = resp_pub.json() or {}
+        resultados = data.get("items", [])
+        total = int(data.get("total", 0) or 0)
+        page = int(data.get("page", page) or page)
+        pages = int(data.get("pages", 1) or 1)
+    except Exception as e:
+        error = "No se pudieron cargar las publicaciones."
+
+    for p in resultados:
+        url = p.get("url")
+        if url.startswith("/"):
+            p["url"] = f"{BACKEND_URL}{url}"
+            p["es_archivo_subido"] = "/uploads/" in url
+        else:
+            p["es_archivo_subido"] = False
+
+        p["resenas"] = []
+        pub_id = p.get("id")
+        if pub_id is not None:
+            try:
+                resp_r = requests.get(
+                    f"{BACKEND_URL}/api/publicaciones/{pub_id}/comentarios",
+                    timeout=10,
+                )
+                if resp_r.status_code == 200:
+                    p["resenas"] = resp_r.json() or []
+            except Exception as e:
+                print(f"Error al obtener reseñas de pub {pub_id}:", e)
+
     return render_template(
         "busqueda.html",
-        materias=materias,
-        backend_url=BACKEND_URL,
         user=user,
+        materias=materias,
+        resultados=resultados,
+        total=total,
+        page=page,
+        pages=pages,
+        page_size=page_size,
+        q=q,
+        sort=sort,
+        materias_seleccionadas=materias_sel,
+        formatos_seleccionados=formatos_sel,
+        error=error,
     )
+
+
+@app.route("/descargar_archivo")
+@login_required
+def descargar_archivo():
+    file_url = request.args.get("file_url")
+    if not file_url:
+        abort(400)
+
+    try:
+        backend_resp = requests.get(file_url, stream=True, timeout=10)
+    except Exception as e:
+        abort(502)
+
+    if backend_resp.status_code != 200:
+        abort(backend_resp.status_code)
+
+    filename = file_url.rsplit("/", 1)[-1]
+
+    resp = Response(
+        backend_resp.content,
+        status=200,
+        mimetype=backend_resp.headers.get(
+            "Content-Type",
+            "application/octet-stream",
+        ),
+    )
+    resp.headers["Content-Disposition"] = f'attachment; filename="{filename}"'
+    return resp
+
     
 @app.route("/registro", methods=["GET", "POST"])
 def registro():

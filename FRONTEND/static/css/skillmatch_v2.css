@@ -50,6 +50,22 @@ nav  .navbar-list  li .skillmatch{
     align-items: center; 
     
 }
+/*
+
+.navbar-list .listas:hover  { 
+    background-color:rgb(109, 197, 231);
+    border: 1px solid black; 
+    border-radius: 6px; 
+    color: black;
+}
+
+.navbar-list .listas:hover  a  {
+    color: black;
+    text-decoration: none;
+    font-weight: bold; 
+    background-color:rgb(109, 197, 231); 
+
+}*/
 
 .navbar-list .listas a:hover  {
     color:lightblue;
@@ -104,13 +120,13 @@ footer .sp p {
 /*   FIN FOOTER    */
 
 :root{
-  /* Paleta ) */
+  /* Paleta vibrante (azules/violáceos) */
   --ink: #0b1424;
   --muted: #7e8aa8;
 
-  --primary: #3b82f6;   
-  --primary-2: #7aa8ff; 
-  --accent: #9c6bff;    
+  --primary: #3b82f6;   /* azul vivo */
+  --primary-2: #7aa8ff; /* brillo */
+  --accent: #9c6bff;    /* violeta neón */
 
   --glass: rgba(255,255,255,.08);
   --line: rgba(255,255,255,.12);
@@ -120,7 +136,7 @@ footer .sp p {
   --shadow: 0 20px 60px rgba(0,0,0,.35);
 }
 
-/*  Fondo  */
+/* ===== Fondo futurista (neón + blur) ===== */
 html,body{height:100%}
 body{
   margin:0; font-family:Inter, system-ui, Segoe UI, Roboto, Ubuntu, Cantarell, Arial;
@@ -148,11 +164,11 @@ body::after{ animation-duration: 26s; animation-direction: alternate-reverse; op
   100%{ transform: translate3d(2%, 1%, 0) scale(1.03) }
 }
 
-/* Util  */
+/* ===== Util ===== */
 *{box-sizing:border-box}
 .container{max-width:1200px; margin:0 auto; padding:0 1rem}
 
-/* Header  */
+/* ===== Header ===== */
 .site-header{
   position:sticky; top:0; z-index:20;
   background:rgba(8,12,24,.65); backdrop-filter: blur(10px) saturate(1.2);
@@ -164,7 +180,7 @@ body::after{ animation-duration: 26s; animation-direction: alternate-reverse; op
 .nav a{color:#cfd9ff; text-decoration:none; margin-left:1rem; opacity:.85}
 .nav a:hover{opacity:1}
 
-/* Hero */
+/* ===== Hero ===== */
 .hero{padding:2.4rem 0 1.2rem}
 .hero h1{margin:.2rem 0 .35rem; font-size:46px; letter-spacing:.6px}
 .hero .mark{
@@ -190,11 +206,11 @@ body::after{ animation-duration: 26s; animation-direction: alternate-reverse; op
 .btn-ghost{background:transparent; border:1px solid var(--line); color:#eaf1ff}
 .btn-ghost:hover{background:rgba(255,255,255,.06)}
 
-/*  Layout principal  */
+/* ===== Layout principal ===== */
 .layout{display:grid; grid-template-columns:340px 1fr; gap:1.6rem; margin-top:1rem}
 @media (max-width:1000px){ .layout{grid-template-columns:1fr} }
 
-/*  Filtros */
+/* ===== Filtros (glassmorphism) ===== */
 .filters{
   align-self:start; position:sticky; top:92px; background:var(--card);
   border:1px solid var(--line); border-radius:18px; padding:1rem; box-shadow: var(--shadow)
@@ -253,8 +269,12 @@ select{
 .badge{display:inline-block; border:1px solid var(--line); background:rgba(255,255,255,.06); border-radius:999px; padding:.12rem .55rem; font-size:.78rem}
 .tags{display:flex; gap:.4rem; flex-wrap:wrap; margin:.45rem 0}
 .desc{color:#d6e3ff}
-.actions{display:flex; gap:.6rem; margin-top:.75rem}
-
+.actions{
+  display:flex;
+  flex-wrap: wrap;      
+  gap:.6rem;
+  margin-top:.75rem;
+}
 /* Empty state (sin datos) */
 .empty-state{
   border:1px dashed var(--line); border-radius:18px; padding:2rem; text-align:center;
@@ -290,7 +310,7 @@ select{
   body::before, body::after, .empty-state .dot{animation:none}
 }
 
-/*  FORMULARIO DE REGISTRO */
+/* ======== FORMULARIO DE REGISTRO (nuevo) ======== */
 
 .registro-container {
   max-width: 420px;
@@ -302,7 +322,7 @@ select{
   box-shadow: var(--shadow);
   text-align: center;
 }
-/*  Registro institucional  */
+/* === Registro institucional === */
 
 .registro-formulario {
   max-width: 480px;
@@ -587,7 +607,7 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
 .star-rating label:hover ~ label {
   color: #f2b600;
 }
-/* TEMPLATE PUBLICACIONES */
+/* ======== TEMPLATE PUBLICACIONES(nuevo) ======== */
 
 .titulo_presentacion {
   font-family: "Cinzel", serif;
@@ -722,7 +742,7 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
   background-color: #3e8e41;
 }
 
-/* CSS Template home.html */
+/*-- ======== CSS Template home.html ======== */
 
 @keyframes pulse {
   0% { transform: scale(1); }
@@ -773,7 +793,7 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
 
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; 
+  justify-content: flex-start; /* 🔧 cambio clave */
   min-height: auto;   
   margin-bottom: 0; 
 }
@@ -813,36 +833,30 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
 #opciones-privacidad {
   display: flex;
   flex-direction: column;
-  gap: 0; 
-  margin-top: 0.5rem; 
+  gap: 0; /* 🔧 ajustado para eliminar espacio entre tarjetas */
+  margin-top: 0.5rem; /* 🔧 opcional: reduce salto al desplegar */
+}
+/* ======== Reseñas dentro de las cards de búsqueda ======== */
+
+
+.card .actions .btn{
+  flex: 0 0 auto;
 }
 
-/* Reseñas dentro de las cards de búsqueda */
+
 
 .card .reviews-section {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
   border-top: 1px solid var(--line);
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
 }
 
-/* Botones Ver/Ocultar / Enviar reseña */
-.card .reviews-section .btn {
-  font-size: 0.9rem;
-  padding: 0.5rem 0.8rem;
-}
-
-/* Contenedor que aparece al desplegar reseñas */
 .card .reviews-content {
-  margin-top: 0.4rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-/* Lista de reseñas ya existentes */
 .card .reviews-list {
   list-style: none;
   padding: 0;
@@ -850,24 +864,24 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  max-height: 180px;      /* opcional scroll interno */
+  overflow-y: auto;
 }
 
 .card .review-item {
   background: rgba(255,255,255,0.03);
   border-radius: 10px;
-  padding: 0.4rem 0.6rem;
+  padding: 0.3rem 0.5rem;
   font-size: 0.9rem;
 }
 
-/* Formulario de nueva reseña */
 .card .review-form {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  margin-top: 0.4rem;
+  margin-top: 0.3rem;
 }
 
-/* Textarea bien contenido dentro de la card */
 .card .review-form textarea {
   width: 100%;
   max-width: 100%;
@@ -877,17 +891,17 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
   border: 1px solid var(--line);
   background: var(--glass);
   color: #eaf1ff;
-  padding: 0.5rem 0.6rem;
+  padding: 0.4rem 0.5rem;
   box-sizing: border-box;
 }
 
-/* Línea de calificación + botón enviar en una fila */
 .card .review-form .rating-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.3rem;
   flex-wrap: wrap;
 }
+
 
 .card .review-form select {
   background: var(--glass);

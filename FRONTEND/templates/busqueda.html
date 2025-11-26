@@ -5,64 +5,106 @@
   <section class="hero">
     <div class="container">
       <h1><span class="mark">Buscá</span> materiales</h1>
-          {% if user %}
-          <p class="lead">Bienvenido, {{ user.nombre }} — buscá apuntes, parciales y más.</p>
-          {% else %}
-         <p class="lead">Apuntes, parciales resueltos, enlaces y más. Filtrá por materias, tipo y formato.</p>
-          {% endif %}
-      <form id="searchForm" class="searchbar" role="search">
+      {% if user %}
+        <p class="lead">Bienvenido, {{ user.nombre }} — buscá apuntes, parciales y más.</p>
+      {% else %}
+        <p class="lead">Apuntes, parciales resueltos, enlaces y más. Filtrá por materias, tipo y formato.</p>
+      {% endif %}
+
+      <form id="searchForm"
+            class="searchbar"
+            role="search"
+            method="get"
+            action="{{ url_for('buscar') }}">
         <div class="input-wrap">
-          <input id="q" name="q" type="search" placeholder="Ej: parcial análisis | apunte álgebra | final algoritmos" aria-label="Buscar" autocomplete="off">
+          <input id="q"
+                 name="q"
+                 type="search"
+                 placeholder="Ej: parcial análisis | apunte álgebra | final algoritmos"
+                 aria-label="Buscar"
+                 autocomplete="off"
+                 value="{{ q or '' }}">
         </div>
         <button type="submit" class="btn btn-primary">Buscar</button>
       </form>
     </div>
   </section>
 
-  
- <main id="app"
-      class="container layout"
-      data-api-url="{{ backend_url }}/api/publicaciones">
+  <main id="app" class="container layout">
     <!-- FILTROS -->
     <aside class="filters" aria-label="Filtros">
-      <form id="filtersForm">
+      <form id="filtersForm" method="get" action="{{ url_for('buscar') }}">
+        <input type="hidden" name="q" id="qHidden" value="{{ q or '' }}">
+        <input type="hidden" name="sort" id="sortHidden" value="{{ sort or '-fecha' }}">
+        <input type="hidden" name="page" value="{{ page or 1 }}">
+        <input type="hidden" name="page_size" value="{{ page_size or 12 }}">
+
         <fieldset>
-          <legend>Materias <small class="muted materias-counter" aria-live="polite"></small></legend>
+          <legend>
+            Materias
+            <small class="muted materias-counter" aria-live="polite"></small>
+          </legend>
+
           <div class="input-with-icon">
-            <input id="materiaFilter" type="text" placeholder="Filtrar materias…" autocomplete="off">
+            <input id="materiaFilter"
+                   type="text"
+                   placeholder="Filtrar materias…"
+                   autocomplete="off">
             <span class="icon">🔎</span>
           </div>
-        <div id="materiasList" class="checklist" role="group" aria-label="Materias">
-          {% for m in materias %}
-          <label class="materia-item"
-              data-name="{{ m.nombre
-                | lower
-                | replace('á','a')
-                | replace('é','e')
-                | replace('í','i')
-                | replace('ó','o')
-                | replace('ú','u')
-                | replace('ü','u') }}">
-          <input class="ck" type="checkbox" name="materias" value="{{ m.codigo }}">
-          <span class="ckbox"></span>
-          <span class="cklabel">{{ m.nombre }}</span>
-          </label>
-          {% endfor %}
-        </div>
+
+          <div id="materiasList"
+               class="checklist"
+               role="group"
+               aria-label="Materias">
+            {% for m in materias %}
+              <label class="materia-item"
+                     data-name="{{ m.nombre
+                       | lower
+                       | replace('á','a')
+                       | replace('é','e')
+                       | replace('í','i')
+                       | replace('ó','o')
+                       | replace('ú','u')
+                       | replace('ü','u') }}">
+                <input class="ck"
+                       type="checkbox"
+                       name="materias"
+                       value="{{ m.codigo }}"
+                       {% if materias_seleccionadas and m.codigo in materias_seleccionadas %}checked{% endif %}>
+                <span class="ckbox"></span>
+                <span class="cklabel">{{ m.nombre }}</span>
+              </label>
+            {% endfor %}
+          </div>
+
           <div class="filter-actions">
             <button type="button" class="btn btn-ghost" data-action="all">Seleccionar todo</button>
             <button type="button" class="btn btn-ghost" data-action="none">Limpiar</button>
           </div>
         </fieldset>
 
-        {#
-          Filtro por formato del material (pdf, imagen, carpeta
-          comprimida, repositorio).  Se construye dinámicamente
-          en JS en el elemento con id "formatoList".
-        #}
         <fieldset>
           <legend>Formato</legend>
-          <div id="formatoList" class="checklist tiny"></div>
+          <div id="formatoList" class="checklist tiny">
+            {% set formatos_def = [
+              ('pdf', 'PDF'),
+              ('imagen', 'Imagen'),
+              ('carpeta comprimida', 'Carpeta comprimida'),
+              ('repositorio', 'Repositorio')
+            ] %}
+            {% for value, label in formatos_def %}
+              <label class="formato-item">
+                <input class="ck"
+                       type="checkbox"
+                       name="formato"
+                       value="{{ value }}"
+                       {% if formatos_seleccionados and value in formatos_seleccionados %}checked{% endif %}>
+                <span class="ckbox"></span>
+                <span class="cklabel">{{ label }}</span>
+              </label>
+            {% endfor %}
+          </div>
         </fieldset>
 
         <div class="filter-footer">
@@ -75,23 +117,34 @@
     <!-- RESULTADOS -->
     <section class="results">
       <div class="results-bar">
-        <div id="resultsCount" aria-live="polite">Sin resultados aún</div>
+        <div id="resultsCount" aria-live="polite">
+          {% if error %}
+            {{ error }}
+          {% elif total %}
+            {{ total }} resultado{% if total != 1 %}s{% endif %}
+          {% else %}
+            Sin resultados
+          {% endif %}
+        </div>
+
         <div class="bar-actions">
           <label class="select">
             <span>Ordenar</span>
-            <select id="sort" name="sort">
-              <option value="-fecha">Más nuevos</option>
-              <option value="-comentarios">Más comentados</option>
+            <select id="sort">
+              <option value="-fecha" {% if sort == '-fecha' or not sort %}selected{% endif %}>
+                Más nuevos
+              </option>
+              <option value="-comentarios" {% if sort == '-comentarios' %}selected{% endif %}>
+                Más comentados
+              </option>
             </select>
           </label>
         </div>
       </div>
 
-      <!-- Chips -->
       <div id="chips" class="chips" aria-live="polite"></div>
 
-      <!-- mientras no hayan publicaciones para mostrar -->
-      <section id="empty" class="empty-state">
+      <section id="empty" class="empty-state" {% if total %}hidden{% endif %}>
         <div class="holo">
           <div class="dot"></div><div class="dot"></div><div class="dot"></div>
         </div>
@@ -99,29 +152,177 @@
         <p>Usá la barra y los filtros para ver publicaciones. Cuando haya resultados, van a aparecer acá.</p>
       </section>
 
-      <!-- Grid -->
-      <ul id="grid" class="cards" hidden></ul>
+      <!--  RESULTADOS -->
+      <ul id="grid" class="cards" {% if not total %}hidden{% endif %}>
+        {% for p in resultados %}
+          {% set url = p.url or '#' %}
+          <li class="card" id="pub-{{ p.id }}">
+            <h3>
+              <a href="{{ url }}" target="_blank" rel="noopener">
+                {{ p.titulo or "Sin título" }}
+              </a>
+            </h3>
 
-      <!-- Paginación -->
-      <nav id="pagination" class="pagination" aria-label="Paginación" hidden></nav>
- 
+            <div class="meta">
+              <span>Por {{ p.autor_nombre or "Anónimo" }}</span>
+              {% if p.creado_en %} • <span>{{ p.creado_en }}</span>{% endif %}
+              {% if p.formato %}<span class="badge">{{ p.formato }}</span>{% endif %}
+            </div>
+
+            {% if p.materias %}
+              <div class="tags">
+                {% for m in p.materias %}
+                  <span class="badge">{{ m.nombre }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            {% if p.descripcion %}
+              <p class="desc">{{ p.descripcion }}</p>
+            {% endif %}
+
+            <div class="actions">
+              {% if p.url %}
+                <a class="btn btn-primary" href="{{ url }}" target="_blank" rel="noopener">
+                  {% if p.formato in ['pdf', 'imagen'] %}
+                    Ver / previsualizar
+                  {% else %}
+                    Abrir enlace
+                  {% endif %}
+                </a>
+              {% endif %}
+
+              {% if p.es_archivo_subido %}
+                    <a class="btn btn-ghost"
+                      href="{{ url_for('descargar_archivo', file_url=p.url) }}">
+                      Descargar
+                    </a>
+                  {% endif %}
+
+
+              {% if p.autor_email %}
+                {% set mail = p.autor_email %}
+                {% set subject = "Consulta sobre tu publicación en SkillMatch UBA" | urlencode %}
+                {% set body = (
+                  "Hola, te contacto desde SkillMatch UBA por tu publicación '" ~ (p.titulo or '') ~ "'."
+                ) | urlencode %}
+                <a class="btn btn-ghost"
+                   href="mailto:{{ mail }}?subject={{ subject }}&body={{ body }}">
+                  Contactar autor
+                </a>
+              {% endif %}
+
+              <button type="button"
+                      class="btn btn-ghost btn-toggle-reviews"
+                      data-target="panel-resenas-{{ p.id }}">
+                Ver reseñas
+              </button>
+            </div>
+
+            {# RESEÑAS DENTRO DE LA CARD #}
+            <div class="reviews-section" id="panel-resenas-{{ p.id }}" hidden>
+              <div class="reviews-content">
+
+                <ul class="reviews-list">
+                  {% if p.resenas %}
+                    {% for r in p.resenas %}
+                      <li class="review-item">
+                        <div class="reviews-head">
+                          {% set cal = r.calificacion or 0 %}
+                          {% set estrellas = '★' * cal + '☆' * (5 - cal) %}
+                          <span class="stars">{{ estrellas }}</span>
+                          {% if r.fecha_resena %}
+                            <span class="reseña-fecha">{{ r.fecha_resena }}</span>
+                          {% endif %}
+                        </div>
+                        {% if r.comentario %}
+                          <p>{{ r.comentario }}</p>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  {% else %}
+                    <li class="review-item">
+                      <p class="muted">Esta publicación todavía no tiene reseñas.</p>
+                    </li>
+                  {% endif %}
+                </ul>
+
+                <form class="review-form"
+                      method="post"
+                      action="{{ url_for('buscar') }}#pub-{{ p.id }}">
+                  <input type="hidden" name="pub_id" value="{{ p.id }}">
+                  <input type="hidden" name="q" value="{{ q or '' }}">
+                  <input type="hidden" name="sort" value="{{ sort or '-fecha' }}">
+                  <input type="hidden" name="page" value="{{ page or 1 }}">
+                  <input type="hidden" name="page_size" value="{{ page_size or 12 }}">
+
+                  {% for cod in materias_seleccionadas %}
+                    <input type="hidden" name="materias" value="{{ cod }}">
+                  {% endfor %}
+                  {% for f in formatos_seleccionados %}
+                    <input type="hidden" name="formato" value="{{ f }}">
+                  {% endfor %}
+
+                  <textarea name="comentario" rows="3"
+                            placeholder="Escribí tu reseña..."></textarea>
+
+                  <div class="rating-row">
+                    <label for="calificacion-{{ p.id }}">Calificación</label>
+                    <select id="calificacion-{{ p.id }}" name="calificacion">
+                      <option value="5">5 ★</option>
+                      <option value="4">4 ★</option>
+                      <option value="3">3 ★</option>
+                      <option value="2">2 ★</option>
+                      <option value="1">1 ★</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Enviar reseña</button>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+
+          </li>
+        {% endfor %}
+      </ul>
+
+      <nav id="pagination"
+           class="pagination"
+           aria-label="Paginación"
+           {% if pages <= 1 %}hidden{% endif %}>
+        {% if pages > 1 %}
+          {% if page > 1 %}
+            <a href="{{ url_for('buscar',
+                                q=q,
+                                sort=sort,
+                                page=page-1,
+                                page_size=page_size,
+                                materias=materias_seleccionadas,
+                                formato=formatos_seleccionados) }}">
+              Anterior
+            </a>
+          {% endif %}
+
+          <span>Página {{ page }} de {{ pages }}</span>
+
+          {% if page < pages %}
+            <a href="{{ url_for('buscar',
+                                q=q,
+                                sort=sort,
+                                page=page+1,
+                                page_size=page_size,
+                                materias=materias_seleccionadas,
+                                formato=formatos_seleccionados) }}">
+              Siguiente
+            </a>
+          {% endif %}
+        {% endif %}
+      </nav>
     </section>
-
   </main>
-  
-  <br> 
-
-
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  
-  <br> 
 
-  <!-- JS -->
-  
-  
   <script defer src="{{ url_for('static', filename='js/busqueda.js') }}"></script>
-  <br>
-  {% endblock %}
-</body>
-</html>
+
+{% endblock %}
