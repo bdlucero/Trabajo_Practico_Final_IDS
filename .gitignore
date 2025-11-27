@@ -1,0 +1,24 @@
+# Python  
+_pycache_/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Entornos virtuales  
+venv/
+.venv/
+env/
+
+#  Archivos de entorno 
+FrontEnd/.env
+
+
+# testing  
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+#   editores  
+.vscode/
