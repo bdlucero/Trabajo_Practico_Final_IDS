@@ -1,13 +1,16 @@
 from flask import Flask, Response, abort, render_template, redirect, url_for, request, session
 import os, requests
 from functools import wraps
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
 #  CONFIGURACIÓN lOGUEO
-app.secret_key = "clave_super_secreta_para_sesiones"
-BACKEND_URL = os.environ.get("BACKEND_URL", "http://127.0.0.1:5050")
-GOOGLE_CLIENT_ID = "469004002801-logurlhvbb0e682h0rfesar7vtl6f0o0.apps.googleusercontent.com"
+app.secret_key = os.environ.get("SECRET_KEY")
+BACKEND_URL = os.environ.get("BACKEND_URL")
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
+
 
 def login_required(view_func):
     """Redirige a /registro si no hay usuario en sesión."""
@@ -307,7 +310,7 @@ def logout():
 
 @app.route("/resenas", methods=["GET", "POST"])
 def resenas():
-    user = session.get("user")
+    user = session.get("user") or {}
 
     materias = []
     error = None
@@ -324,11 +327,11 @@ def resenas():
     if request.method == "POST":
         form = request.form
 
-        asignatura = (form.get("asignatura"))
-        nombre = (form.get("nombre"))
-        titulo_resena = (form.get("titulo_resena"))
-        resena_texto = (form.get("resena"))
-        satisfaccion = (form.get("satisfaccion"))
+        asignatura = (form.get("asignatura") or "").strip()
+        nombre = (form.get("nombre") or "").strip()
+        titulo_resena = (form.get("titulo_resena") or "").strip()
+        resena_texto = (form.get("resena") or "").strip()
+        satisfaccion = (form.get("satisfaccion") or "").strip()
 
         if not asignatura or not nombre or not resena_texto or not satisfaccion:
             error = "Completá todos los campos obligatorios."
@@ -349,20 +352,20 @@ def resenas():
 
             id_usuario = user.get("legajo")
 
-            info_resenas = {
-                "id_materia": asignatura,       
+            payload = {
+                "id_materia": asignatura,      
                 "comentario": comentario,
                 "puntuacion": puntuacion_int,
-                "id_usuario": id_usuario,      
+                "id_usuario": id_usuario,       
             }
 
             try:
                 api_resp = requests.post(
                     f"{BACKEND_URL}/api/resenas_cursos",
-                    json=info_resenas,
+                    json=payload,
                     timeout=10,
                 )
-
+               
             except requests.RequestException as e:
                 print("Error al llamar a /api/resenas_cursos:", e)
                 error = "No se pudo guardar la reseña."
@@ -373,8 +376,8 @@ def resenas():
         user=user,
         error=error,
         mensaje=mensaje,
-        api_resp=api_resp
     )
+
 
 @app.route('/publicaciones', methods=["GET", "POST"])
 def publicaciones():
@@ -441,6 +444,38 @@ def publicaciones():
         "publicaciones.html",
         API_URL=BACKEND_URL,
         materias=materias,
+    )
+
+@app.route("/cursos")
+@login_required
+def cursos():
+    user = session.get("user") 
+    materias = []
+    resenas = []
+
+    # Traer materias
+    try:
+        resp = requests.get(f"{BACKEND_URL}/api/materias", timeout=5)
+        resp.raise_for_status()
+        materias = resp.json()
+    except Exception as e:
+        print("Error al obtener materias para cursos:", e)
+
+    # Traer reseñas de cursos
+    try:
+        resp_r = requests.get(f"{BACKEND_URL}/api/resenas_cursos", timeout=5)
+        if resp_r.status_code == 200:
+            resenas = resp_r.json()
+        else:
+            print("Error al obtener reseñas de cursos:", resp_r.status_code, resp_r.text)
+    except Exception as e:
+        print("Error al llamar a /api/resenas_cursos:", e)
+
+    return render_template(
+        "cursos.html",
+        materias=materias,   
+        resenas=resenas,     
+        user=user,
     )
 
 
