@@ -1,13 +1,16 @@
 from flask import Flask, Response, abort, render_template, redirect, url_for, request, session
 import os, requests
 from functools import wraps
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
 #  CONFIGURACIÓN lOGUEO
-app.secret_key = "clave_super_secreta_para_sesiones"
-BACKEND_URL = os.environ.get("BACKEND_URL", "http://127.0.0.1:5050")
-GOOGLE_CLIENT_ID = "469004002801-logurlhvbb0e682h0rfesar7vtl6f0o0.apps.googleusercontent.com"
+app.secret_key = os.environ.get("SECRET_KEY")
+BACKEND_URL = os.environ.get("BACKEND_URL")
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
+
 
 def login_required(view_func):
     """Redirige a /registro si no hay usuario en sesión."""
