@@ -443,28 +443,61 @@ CREATE TABLE `resena_publicacion` (
   `comentario` TEXT DEFAULT NULL,
   `fecha_resena` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+--
+-- Volcado de datos para la tabla `resena_publicacion`
+--
 
--- Indices de la tabla `formato`
+INSERT INTO `resena_publicacion` (`id_resena_publicacion`, `id_usuario`, `id_publicacion`, `calificacion`, `comentario`, `fecha_resena`) VALUES
+(1, NULL, 6, 5, 'prueba', '2025-11-25 02:48:34'),
+(2, NULL, 6, 1, 'hola mundo', '2025-11-25 02:50:39');
+
+-- ------------------------------------------------
+--
+-- Indices de la tabla `resena_publicacion`
+--
 ALTER TABLE `resena_publicacion`
   ADD PRIMARY KEY (`id_resena_publicacion`),
-  ADD KEY `idx_resena_usuario` (`id_usuario`),
-  ADD KEY `idx_resena_aporte` (`id_publicacion`);
+  ADD KEY `id_publicacion` (`id_publicacion`),
+  ADD KEY `id_usuario` (`id_usuario`);
 
--- AUTO_INCREMENT de la tabla `resena_publicacion`
-
+- AUTO_INCREMENT de la tabla `resena_publicacion`
+--
 ALTER TABLE `resena_publicacion`
-  MODIFY `id_resena_publicacion` INT NOT NULL AUTO_INCREMENT;
+  MODIFY `id_resena_publicacion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+-
+-- Estructura de tabla para la tabla `Resenas_cursos`
+--
 
-ALTER TABLE `resena_publicacion`
-  ADD CONSTRAINT `fk_resena_usuario`
-  FOREIGN KEY (`id_usuario`)
-  REFERENCES `USERS`(`legajo`)
-  ON DELETE CASCADE
-  ON UPDATE CASCADE;
+CREATE TABLE `Resenas_cursos` (
+  `id_resena` int NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_materia` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `comentario` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `puntuacion` int NOT NULL,
+  `fecha_resena` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-ALTER TABLE `resena_publicacion`
-  ADD CONSTRAINT `fk_resena_aporte`
-  FOREIGN KEY (`id_publicacion`)
-  REFERENCES `publicaciones`(`id`)
-  ON DELETE CASCADE
-  ON UPDATE CASCADE;
+--
+-- Volcado de datos para la tabla `Resenas_cursos`
+--
+
+INSERT INTO `Resenas_cursos` (`id_resena`, `id_usuario`, `id_materia`, `comentario`, `puntuacion`, `fecha_resena`) VALUES
+(1, 1, 'COM01', 'Muy buena asignatura, aprendí bastante.', 5, '2025-11-21 00:47:13'),
+(2, 2, 'COM01', 'Está bien, pero faltan ejemplos prácticos.', 3, '2025-11-21 00:47:13'),
+(3, 1, 'COM02', 'Excelente explicación de conceptos.', 4, '2025-11-21 00:47:13');
+
+-- --------------------------------------------------------
+-- Indices de la tabla `Resenas_cursos`
+--
+ALTER TABLE `Resenas_cursos`
+  ADD PRIMARY KEY (`id_resena`),
+  ADD KEY `fk_resenas_cursos_usuario` (`id_usuario`),
+  ADD KEY `fk_resenas_cursos_materia` (`id_materia`);
+
+--
+-- AUTO_INCREMENT de la tabla `Resenas_cursos`
+--
+ALTER TABLE `Resenas_cursos`
+  MODIFY `id_resena` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
