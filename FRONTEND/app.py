@@ -307,7 +307,7 @@ def logout():
 
 @app.route("/resenas", methods=["GET", "POST"])
 def resenas():
-    user = session.get("user")
+    user = session.get("user") or {}
 
     materias = []
     error = None
@@ -324,11 +324,11 @@ def resenas():
     if request.method == "POST":
         form = request.form
 
-        asignatura = (form.get("asignatura"))
-        nombre = (form.get("nombre"))
-        titulo_resena = (form.get("titulo_resena"))
-        resena_texto = (form.get("resena"))
-        satisfaccion = (form.get("satisfaccion"))
+        asignatura = (form.get("asignatura") or "").strip()
+        nombre = (form.get("nombre") or "").strip()
+        titulo_resena = (form.get("titulo_resena") or "").strip()
+        resena_texto = (form.get("resena") or "").strip()
+        satisfaccion = (form.get("satisfaccion") or "").strip()
 
         if not asignatura or not nombre or not resena_texto or not satisfaccion:
             error = "Completá todos los campos obligatorios."
@@ -349,20 +349,20 @@ def resenas():
 
             id_usuario = user.get("legajo")
 
-            info_resenas = {
-                "id_materia": asignatura,       
+            payload = {
+                "id_materia": asignatura,      
                 "comentario": comentario,
                 "puntuacion": puntuacion_int,
-                "id_usuario": id_usuario,      
+                "id_usuario": id_usuario,       
             }
 
             try:
                 api_resp = requests.post(
                     f"{BACKEND_URL}/api/resenas_cursos",
-                    json=info_resenas,
+                    json=payload,
                     timeout=10,
                 )
-
+               
             except requests.RequestException as e:
                 print("Error al llamar a /api/resenas_cursos:", e)
                 error = "No se pudo guardar la reseña."
@@ -373,8 +373,8 @@ def resenas():
         user=user,
         error=error,
         mensaje=mensaje,
-        api_resp=api_resp
     )
+
 
 @app.route('/publicaciones', methods=["GET", "POST"])
 def publicaciones():
