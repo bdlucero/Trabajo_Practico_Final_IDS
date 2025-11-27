@@ -2,6 +2,7 @@ from flask import Flask, Blueprint
 from flask_cors import CORS
 from busqueda import busqueda_bp
 from home import home_bp
+from usuarios import usuarios_bp
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -11,6 +12,7 @@ def create_app() -> Flask:
 
     api_bp.register_blueprint(busqueda_bp)
     api_bp.register_blueprint(home_bp)
+    api_bp.register_blueprint(usuarios_bp)
     
     app.register_blueprint(api_bp)
 
