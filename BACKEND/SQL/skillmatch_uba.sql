@@ -3,7 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
-
+-- Tiempo de generación: 25-11-2025 a las 19:51:25
+-- Versión del servidor: 8.0.44-0ubuntu0.24.04.1
+-- Versión de PHP: 8.3.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -381,6 +383,91 @@ INSERT INTO `materias` (`id`, `codigo`, `materia`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `publicaciones`
+--
+
+CREATE TABLE `publicaciones` (
+  `id` int NOT NULL,
+  `titulo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `descripcion` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `formato` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `autor_nombre` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `autor_email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `materia_codigo` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `legajo_usuario` int DEFAULT NULL,
+  `creado_en` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `publicaciones`
+--
+
+INSERT INTO `publicaciones` (`id`, `titulo`, `descripcion`, `formato`, `url`, `autor_nombre`, `autor_email`, `materia_codigo`, `legajo_usuario`, `creado_en`) VALUES
+(1, 'Apunte de Análisis Matemático II - Parciales', 'Resumen de teoría y ejercicios de parciales de Análisis Matemático II.', 'pdf', 'https://drive.google.com/ejemplo-apunte-analisis', 'Juan Pérez', 'juan@example.com', 'COM01', 1, '2025-11-21 18:00:00'),
+(2, 'Parcial resuelto de Fundamentos de Programación', 'Parcial resuelto con comentarios sobre las soluciones.', 'repositorio', 'https://github.com/usuario/fundamentos-parcial', 'María López', 'maria@example.com', 'INF01', 2, '2025-11-21 19:00:00'),
+(3, 'primera publicacion', 'esta es una prueba del endpoint crear publicacion', 'imagen', '/uploads/e1c886ed6dc04dd9be45c0daddc0bf1f_archivoprueba.png', 'alejandro', 'alejo@gmail.com', 'AGR01', NULL, '2025-11-24 00:28:13'),
+(4, 'PRUEBA 2 DE ENDPOINT', 'VERIFICACION FUNCIONALIDAD ENDPOINT DE PUBLICACIONES.', 'imagen', '/uploads/2891646b13ad45bfbee6651f68b51d65_archivoprueba.png', '', '', 'INF02', NULL, '2025-11-24 20:26:51'),
+(5, 'hola', 'prueba', 'imagen', '/api/uploads/ffc9613dc0cb497db9114591afa2fb76_archivoprueba.png', '', '', 'AGR07', NULL, '2025-11-24 21:50:03'),
+(6, 'hola mundo!', 'hola mundo', 'imagen', '/api/uploads/21b6674f15094e7898495fe91344c1e0_archivoprueba.png', '', '', 'COM01', NULL, '2025-11-25 00:52:32'),
+(7, 'hola', 'chao', 'repositorio', 'https://www.facebook.com/login', 'melany', 'ajimenezb@fi.uba.ar', 'AGR04', 10169, '2025-11-25 07:01:31');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `Resenas_cursos`
+--
+
+CREATE TABLE `Resenas_cursos` (
+  `id_resena` int NOT NULL,
+  `id_usuario` int DEFAULT NULL,
+  `id_materia` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `comentario` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `puntuacion` int NOT NULL,
+  `fecha_resena` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `Resenas_cursos`
+--
+
+INSERT INTO `Resenas_cursos` (`id_resena`, `id_usuario`, `id_materia`, `comentario`, `puntuacion`, `fecha_resena`) VALUES
+(1, 1, 'COM01', 'Muy buena asignatura, aprendí bastante.', 5, '2025-11-21 00:47:13'),
+(2, 2, 'COM01', 'Está bien, pero faltan ejemplos prácticos.', 3, '2025-11-21 00:47:13'),
+(3, 1, 'COM02', 'Excelente explicación de conceptos.', 4, '2025-11-21 00:47:13'),
+(4, NULL, 'AGR01', 'primera reseña\nAutor: santi gomez\n\nhola', 3, '2025-11-25 04:18:22'),
+(5, NULL, 'BIO10', 'primera reseña\nAutor: santi gomez\n\nhola', 4, '2025-11-25 04:18:44'),
+(6, NULL, 'ALI02', 'que haces\nAutor: bea\n\nsuper la pagina', 5, '2025-11-25 04:19:35'),
+(7, NULL, 'AGR01', 'va a aparecer en el home\nAutor: felipe\n\n.', 5, '2025-11-25 04:38:21'),
+(8, 10169, 'AGR10', 'pruebita\nholanda', 3, '2025-11-25 06:58:43');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `resena_publicacion`
+--
+
+CREATE TABLE `resena_publicacion` (
+  `id_resena_publicacion` int NOT NULL,
+  `id_usuario` int DEFAULT NULL,
+  `id_publicacion` int NOT NULL,
+  `calificacion` int NOT NULL,
+  `comentario` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `fecha_resena` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `resena_publicacion`
+--
+
+INSERT INTO `resena_publicacion` (`id_resena_publicacion`, `id_usuario`, `id_publicacion`, `calificacion`, `comentario`, `fecha_resena`) VALUES
+(1, NULL, 6, 5, 'prueba', '2025-11-25 02:48:34'),
+(2, NULL, 6, 1, 'hola mundo', '2025-11-25 02:50:39'),
+(3, NULL, 7, 3, 'muy b uenio che', '2025-11-25 07:02:05');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `USERS`
 --
 
@@ -396,8 +483,13 @@ CREATE TABLE `USERS` (
 --
 
 INSERT INTO `USERS` (`nombre`, `apellido`, `email`, `legajo`) VALUES
+('alejo', 'barrera', 'ajimenezb@fi.uba.ar', 0),
 ('Juan', 'Pérez', 'juan@example.com', 1),
-('María', 'López', 'maria@example.com', 2);
+('María', 'López', 'maria@example.com', 2),
+('melany', 'jimenez', 'ajimenezb@fi.uba.ar', 10169),
+('alejo', 'jimenez', 'ajimenezb@fi.uba.ar', 12345),
+('alejo', 'jimenez', 'ajimenezb@fi.uba.ar', 114773),
+('jona', 'iwdhwidgw', 'ajimenezb@fi.uba.ar', 836384);
 
 --
 -- Índices para tablas volcadas
@@ -417,11 +509,36 @@ ALTER TABLE `materias`
   ADD PRIMARY KEY (`codigo`);
 
 --
+-- Indices de la tabla `publicaciones`
+--
+ALTER TABLE `publicaciones`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `legajo_usuario` (`legajo_usuario`),
+  ADD KEY `idx_publicaciones_materia` (`materia_codigo`),
+  ADD KEY `idx_publicaciones_formato` (`formato`),
+  ADD KEY `idx_publicaciones_usuario` (`legajo_usuario`);
+
+--
+-- Indices de la tabla `Resenas_cursos`
+--
+ALTER TABLE `Resenas_cursos`
+  ADD PRIMARY KEY (`id_resena`),
+  ADD KEY `fk_resenas_cursos_usuario` (`id_usuario`),
+  ADD KEY `fk_resenas_cursos_materia` (`id_materia`);
+
+--
+-- Indices de la tabla `resena_publicacion`
+--
+ALTER TABLE `resena_publicacion`
+  ADD PRIMARY KEY (`id_resena_publicacion`),
+  ADD KEY `id_publicacion` (`id_publicacion`),
+  ADD KEY `id_usuario` (`id_usuario`);
+
+--
 -- Indices de la tabla `USERS`
 --
 ALTER TABLE `USERS`
   ADD PRIMARY KEY (`legajo`);
-
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -433,66 +550,11 @@ ALTER TABLE `USERS`
 ALTER TABLE `formato`
   MODIFY `id_formato` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
--- Estructura de tabla para la tabla `resena_publicacion`
-
-CREATE TABLE `resena_publicacion` (
-  `id_resena_publicacion` INT NOT NULL,
-  `id_usuario` INT NOT NULL,
-  `id_publicacion` INT NOT NULL,
-  `calificacion` INT NOT NULL,
-  `comentario` TEXT DEFAULT NULL,
-  `fecha_resena` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 --
--- Volcado de datos para la tabla `resena_publicacion`
+-- AUTO_INCREMENT de la tabla `publicaciones`
 --
-
-INSERT INTO `resena_publicacion` (`id_resena_publicacion`, `id_usuario`, `id_publicacion`, `calificacion`, `comentario`, `fecha_resena`) VALUES
-(1, NULL, 6, 5, 'prueba', '2025-11-25 02:48:34'),
-(2, NULL, 6, 1, 'hola mundo', '2025-11-25 02:50:39');
-
--- ------------------------------------------------
---
--- Indices de la tabla `resena_publicacion`
---
-ALTER TABLE `resena_publicacion`
-  ADD PRIMARY KEY (`id_resena_publicacion`),
-  ADD KEY `id_publicacion` (`id_publicacion`),
-  ADD KEY `id_usuario` (`id_usuario`);
-
-- AUTO_INCREMENT de la tabla `resena_publicacion`
---
-ALTER TABLE `resena_publicacion`
-  MODIFY `id_resena_publicacion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
--
--- Estructura de tabla para la tabla `Resenas_cursos`
---
-
-CREATE TABLE `Resenas_cursos` (
-  `id_resena` int NOT NULL,
-  `id_usuario` int NOT NULL,
-  `id_materia` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `comentario` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `puntuacion` int NOT NULL,
-  `fecha_resena` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `Resenas_cursos`
---
-
-INSERT INTO `Resenas_cursos` (`id_resena`, `id_usuario`, `id_materia`, `comentario`, `puntuacion`, `fecha_resena`) VALUES
-(1, 1, 'COM01', 'Muy buena asignatura, aprendí bastante.', 5, '2025-11-21 00:47:13'),
-(2, 2, 'COM01', 'Está bien, pero faltan ejemplos prácticos.', 3, '2025-11-21 00:47:13'),
-(3, 1, 'COM02', 'Excelente explicación de conceptos.', 4, '2025-11-21 00:47:13');
-
--- --------------------------------------------------------
--- Indices de la tabla `Resenas_cursos`
---
-ALTER TABLE `Resenas_cursos`
-  ADD PRIMARY KEY (`id_resena`),
-  ADD KEY `fk_resenas_cursos_usuario` (`id_usuario`),
-  ADD KEY `fk_resenas_cursos_materia` (`id_materia`);
+ALTER TABLE `publicaciones`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `Resenas_cursos`
@@ -501,3 +563,24 @@ ALTER TABLE `Resenas_cursos`
   MODIFY `id_resena` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT de la tabla `resena_publicacion`
+--
+ALTER TABLE `resena_publicacion`
+  MODIFY `id_resena_publicacion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `publicaciones`
+--
+ALTER TABLE `publicaciones`
+  ADD CONSTRAINT `fk_publicaciones_formato` FOREIGN KEY (`formato`) REFERENCES `formato` (`nombre`),
+  ADD CONSTRAINT `fk_publicaciones_materia` FOREIGN KEY (`materia_codigo`) REFERENCES `materias` (`codigo`),
+  ADD CONSTRAINT `fk_publicaciones_usuario` FOREIGN KEY (`legajo_usuario`) REFERENCES `USERS` (`legajo`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
