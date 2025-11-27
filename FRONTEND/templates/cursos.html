@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+  <section class="hero">
+    <div class="container">
+      <h1><span class="mark">Buscá</span> Reseñas</h1> 
+
+      <form id="searchForm"
+            class="searchbar"
+            role="search"
+            method="get"
+            action="{{ url_for('cursos') }}">
+        <div class="input-wrap">
+          <input id="q"
+                 name="q"
+                 type="search"
+                 aria-label="Buscar"
+                 autocomplete="off"
+                 placeholder="Ej: análisis, álgebra, profesor..."
+                 value="{{ q or '' }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- App root -->
+  <main id="app" class="container layout">
+
+    <!-- FILTROS -->
+    <aside class="filters" aria-label="Filtros">
+      <form id="filtersForm" method="get" action="{{ url_for('cursos') }}">
+        {# mantener el texto de búsqueda al cambiar filtros #}
+        <input type="hidden" name="q" value="{{ q or '' }}">
+
+        <fieldset>
+          <legend>
+            Filtrar por Asignatura
+            <small class="muted materias-counter" aria-live="polite"></small>
+          </legend>
+
+          <div class="input-with-icon">
+            <input id="materiaFilter"
+                   type="text"
+                   placeholder="Filtrar Asignatura…"
+                   autocomplete="off">
+            <span class="icon">🔎</span>
+          </div>
+
+          <div id="materiasList"
+               class="checklist"
+               role="group"
+               aria-label="Materias">
+            {% for m in materias %}
+              <label class="materia-item"
+                     data-name="{{ m.nombre
+                         | lower
+                         | replace('á','a')
+                         | replace('é','e')
+                         | replace('í','i')
+                         | replace('ó','o')
+                         | replace('ú','u')
+                         | replace('ü','u') }}">
+                <input class="ck"
+                       type="checkbox"
+                       name="materias"
+                       value="{{ m.codigo }}"
+                       {% if materias_seleccionadas and m.codigo in materias_seleccionadas %}checked{% endif %}>
+                <span class="ckbox"></span>
+                <span class="cklabel">{{ m.nombre }}</span>
+              </label>
+            {% endfor %}
+          </div>
+
+          <div class="filter-actions">
+            <button type="button" class="btn btn-ghost" data-action="all">Seleccionar todo</button>
+            <button type="button" class="btn btn-ghost" data-action="none">Limpiar</button>
+          </div>
+        </fieldset>
+      </form>
+    </aside>
+
+    <!-- RESULTADOS -->
+    <section class="results">
+
+      <!-- RESEÑAS DE CURSOS -->
+      <section class="reseñas" style="text-align: center;">
+        <h3>Reseñas de Asignaturas</h3>
+
+        {% if resenas %}
+          <ul style="list-style: none; padding: 0; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+            {% for r in resenas %}
+              <li class="card3 scalex"
+                  style="width: 280px;"
+                  data-materia="{{ r.id_materia|e }}">
+                <h4>{{ r.asignatura }}</h4>
+                <p class="desc">“{{ r.comentario }}”</p>
+
+                <!-- Mostrar estrellas -->
+                <p>
+                  {% for s in range(r.puntuacion) %}★{% endfor %}
+                </p>
+
+              <span class="meta" style="display: block; text-align: right;">
+                — ANONIMO 
+              </span>             
+           </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p style="text-align:center;">No hay reseñas para los filtros seleccionados. 🌟</p>
+        {% endif %}
+      </section>
+
+    </section>
+
+    <!-- Grid y paginación quedan por compatibilidad, pero no se usan -->
+    <ul id="grid" class="cards" hidden></ul>
+    <nav id="pagination" class="pagination" aria-label="Paginación" hidden></nav>
+
+  </main>
+  
+  <br>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  
+  <br>
+
+  <script src="{{ url_for('static', filename='js/resenas_filtro.js') }}"></script>
+
+  <br>
+{% endblock %}
