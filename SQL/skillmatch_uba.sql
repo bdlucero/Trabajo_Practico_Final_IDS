@@ -381,6 +381,37 @@ INSERT INTO `materias` (`id`, `codigo`, `materia`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `publicaciones`
+--
+
+CREATE TABLE `publicaciones` (
+  `id` int NOT NULL,
+  `titulo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `descripcion` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `formato` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `autor_nombre` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `autor_email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `materia_codigo` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `legajo_usuario` int DEFAULT NULL,
+  `creado_en` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `publicaciones`
+--
+
+INSERT INTO `publicaciones` (`id`, `titulo`, `descripcion`, `formato`, `url`, `autor_nombre`, `autor_email`, `materia_codigo`, `legajo_usuario`, `creado_en`) VALUES
+(1, 'Apunte de Análisis Matemático II - Parciales', 'Resumen de teoría y ejercicios de parciales de Análisis Matemático II.', 'pdf', 'https://drive.google.com/ejemplo-apunte-analisis', 'Juan Pérez', 'juan@example.com', 'COM01', 1, '2025-11-21 18:00:00'),
+(2, 'Parcial resuelto de Fundamentos de Programación', 'Parcial resuelto con comentarios sobre las soluciones.', 'repositorio', 'https://github.com/usuario/fundamentos-parcial', 'María López', 'maria@example.com', 'INF01', 2, '2025-11-21 19:00:00'),
+(3, 'primera publicacion', 'esta es una prueba del endpoint crear publicacion', 'imagen', '/uploads/e1c886ed6dc04dd9be45c0daddc0bf1f_archivoprueba.png', 'alejandro', 'alejo@gmail.com', 'AGR01', NULL, '2025-11-24 00:28:13'),
+(4, 'PRUEBA 2 DE ENDPOINT', 'VERIFICACION FUNCIONALIDAD ENDPOINT DE PUBLICACIONES.', 'imagen', '/uploads/2891646b13ad45bfbee6651f68b51d65_archivoprueba.png', '', '', 'INF02', NULL, '2025-11-24 20:26:51'),
+(5, 'hola', 'prueba', 'imagen', '/api/uploads/ffc9613dc0cb497db9114591afa2fb76_archivoprueba.png', '', '', 'AGR07', NULL, '2025-11-24 21:50:03'),
+(6, 'hola mundo!', 'hola mundo', 'imagen', '/api/uploads/21b6674f15094e7898495fe91344c1e0_archivoprueba.png', '', '', 'COM01', NULL, '2025-11-25 00:52:32'),
+(7, 'hola', 'chao', 'repositorio', 'https://www.facebook.com/login', 'melany', 'ajimenezb@fi.uba.ar', 'AGR04', 10169, '2025-11-25 07:01:31');
+
+-- --------------------------------------------------------
+--
 -- Estructura de tabla para la tabla `USERS`
 --
 
@@ -417,6 +448,16 @@ ALTER TABLE `materias`
   ADD PRIMARY KEY (`codigo`);
 
 --
+-- Indices de la tabla `publicaciones`
+--
+ALTER TABLE `publicaciones`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `legajo_usuario` (`legajo_usuario`),
+  ADD KEY `idx_publicaciones_materia` (`materia_codigo`),
+  ADD KEY `idx_publicaciones_formato` (`formato`),
+  ADD KEY `idx_publicaciones_usuario` (`legajo_usuario`);
+
+--
 -- Indices de la tabla `USERS`
 --
 ALTER TABLE `USERS`
@@ -432,6 +473,13 @@ ALTER TABLE `USERS`
 --
 ALTER TABLE `formato`
   MODIFY `id_formato` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `publicaciones`
+--
+ALTER TABLE `publicaciones`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
 
 -- Estructura de tabla para la tabla `resena_publicacion`
 
@@ -501,3 +549,21 @@ ALTER TABLE `Resenas_cursos`
   MODIFY `id_resena` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `publicaciones`
+--
+ALTER TABLE `publicaciones`
+  ADD CONSTRAINT `fk_publicaciones_formato` FOREIGN KEY (`formato`) REFERENCES `formato` (`nombre`),
+  ADD CONSTRAINT `fk_publicaciones_materia` FOREIGN KEY (`materia_codigo`) REFERENCES `materias` (`codigo`),
+  ADD CONSTRAINT `fk_publicaciones_usuario` FOREIGN KEY (`legajo_usuario`) REFERENCES `USERS` (`legajo`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
