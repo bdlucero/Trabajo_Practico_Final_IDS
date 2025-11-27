@@ -607,6 +607,127 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
 .star-rating label:hover ~ label {
   color: #f2b600;
 }
+/* ======== TEMPLATE RESEÑAS ======== */
+
+#asignatura {
+  padding: 10px; 
+  background-color: white; 
+  color: black; 
+  font-family: Inter, system-ui, Segoe UI, Roboto, Ubuntu, Cantarell, Arial;
+  border-radius: 10px; 
+  font-weight: bold; 
+  width: 30%; 
+  margin: 0px 30%;
+}
+
+#nombre {
+  padding: 5px;
+  background-color: white; 
+  border-radius: 5px; 
+  font-weight: 500;
+}
+
+#titulo_resena {
+  padding: 5px;
+  background-color: white; 
+  border-radius: 5px; 
+  font-weight: 500;
+}
+
+#resena {
+  padding: 5px;
+  background-color: white; 
+  border-radius: 5px; 
+  font-weight: 500;
+  /*font-weight: bold; */
+}
+
+
+#formulario_resena{
+  font-family: Inter, system-ui, Segoe UI, Roboto, Ubuntu, Cantarell, Arial;
+  color:#f3f5f9; 
+  margin-top: 30px; 
+  font-weight: 900; 
+  text-align: center; 
+  margin-bottom: 30px;
+}
+
+#formulario_resena label{
+  margin-bottom: 0px; 
+  font-family: Inter, system-ui, Segoe UI, Roboto, Ubuntu, Cantarell, Arial;
+  font-weight: bold;
+}
+
+#formulario_resena form label{
+  margin-top: 15px;
+}
+
+#formulario_resena input,
+#formulario_resena textarea {
+  width: 400px;
+}
+
+
+#titulo_ventana{
+  padding:2.4rem 0 1.2rem;
+  font-family: Inter, system-ui, Segoe UI, Roboto, Ubuntu, Cantarell, Arial;
+  margin:.2rem 0 .35rem; font-size:46px; letter-spacing:.6px;
+  background-image: linear-gradient(90deg, var(--primary), var(--accent));
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color: transparent; color: transparent; display:inline-block;
+
+  background-image: linear-gradient(90deg, var(--primary), var(--accent));
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color: transparent; color: transparent; display:inline-block;
+}
+
+#boton_resenas {
+  padding:.8rem 1.05rem; border-radius:12px; border:1px solid transparent; font-weight:700; cursor:pointer;
+  background:linear-gradient(90deg, var(--primary), var(--accent)); color:#0a1020; box-shadow: var(--shadow);
+  filter:brightness(1.05);
+  background:transparent; 
+  border:1px solid var(--line); color:black;
+  background:rgb(237, 235, 238);
+  border-radius: 10px; 
+  font-weight: bold; 
+  width: 30%; 
+  margin: 0px 30%;
+}
+
+
+button:hover, #boton_resenas:hover, button[type="submit"]:hover{
+  background-color: transparent; 
+  color: #faf2f2;
+}
+
+.valoracion_resena{
+  justify-content: space-between;
+}
+
+.star-rating {
+  direction: rtl; 
+  padding: 5px; 
+  text-align: center;
+}
+
+.star-rating input[type=radio], .star-rating-template input[type=radio]{ 
+  display: none;
+}
+
+.star-rating label, .star-rating-template label{
+  color: #bbb; 
+  font-size: 30px; 
+  padding: 0 0px; 
+  cursor: pointer; 
+  transition: color 0.3s; 
+  margin-bottom: 0px;
+}
+
+.star-rating input[type=radio]:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: #f2b600;
+}
 /* ======== TEMPLATE PUBLICACIONES(nuevo) ======== */
 
 .titulo_presentacion {
@@ -628,62 +749,6 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
   margin-bottom: 30px;
 
 }
-#open-modal {
-  margin-top: 10px;
-  padding: 10px;
-  font-size: 16px;
-}
-
-.modal{
-  top:0;
-  bottom: 0;
-  left:0;
-  right: 0;
-}
-  
-#modal_formulario{
-  font-family: "Cinzel", serif;
-  color:#14357d;
-  margin-top: 30px;
-  font-weight: 900;
-  text-align: center;
-  margin-bottom: 30px;
-
-  /*width: fit-content;
-  height: fit-content;
-  margin: auto;*/
-}
-
-#modal .modal-content {
-  background: #fdf2d4;
-  margin: auto;
-  padding: 0;
-  width: 60%;
-  border: 1px solid #888;
-  max-height: 80vh; 
-  overflow: auto;
-}
-
-.modal-header {
-  /*display: block;
-  
-  /*justify-content: space-between;*/
-  
-  align-items: center;
-  text-align: center; 
-  padding: 10px 20px;
-  background-color: #f1f1f1;
-  border-bottom: 1px solid #e5e5e5;
-  margin-top: 0px;
-  
-}
-
-#modal .modal-header h2 {
-  margin: 0;
-}
-.modal-header{
-  background-color:#14357d;
-}
 
 .close:hover,
 .close:focus {
@@ -693,16 +758,6 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
 
 #modal .modal-body {
   padding: 20px;
-}
-
-
-#titulo_ventana_modal { 
-  padding-top: 0px;
-  font-family: "Cinzel", serif;
-  font-weight: 500;
-  font-size:large;
-  text-align: center;  
-  color:#fdf2d4;
 }
 
 
@@ -718,7 +773,7 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
 }
 .titulo_formulario {
   padding: 5px;
-  font-family: "Cinzel", serif;
+  font-family:Inter, system-ui, Segoe UI, Roboto, Ubuntu, Cantarell, Arial;
   font-weight: 500;
   font-size:large;
   text-align: center;  
@@ -726,20 +781,40 @@ button:hover, #boton_resenas:hover, #boton_buscar:hover, button[type="submit"]:h
   margin: 0;
 }
 
-.boton-envio {
-  margin-top: 25px;
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+#titulo_aporte{
+  border-radius: 5px; 
 }
+
+#aportes{
+  border-radius: 5px; 
+}
+
+#url_repo{
+  border-radius: 5px; 
+}
+
+.boton-envio {
+  padding:.8rem 1.05rem; border-radius:12px; border:1px solid transparent; font-weight:700; cursor:pointer;
+  background:linear-gradient(90deg, var(--primary), var(--accent)); color:#0a1020; box-shadow: var(--shadow);
+  filter:brightness(1.05);
+  background:transparent; 
+  border:1px solid var(--line); color:black;
+  background:rgb(237, 235, 238);
+  border-radius: 10px; 
+  font-weight: bold; 
+  width: 30%; 
+  margin: 0px 30%;
+}
+/*
 .boton-envio:hover {
   background-color: #45a049;
 }
 .boton-envio:active {
   background-color: #3e8e41;
+}*/
+button:hover, #boton_envio:hover, button[type="submit"]:hover{
+  background-color: transparent; 
+  color: #faf2f2;
 }
 
 /*-- ======== CSS Template home.html ======== */
