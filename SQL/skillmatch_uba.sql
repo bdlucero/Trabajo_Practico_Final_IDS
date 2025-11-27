@@ -380,6 +380,24 @@ INSERT INTO `materias` (`id`, `codigo`, `materia`) VALUES
 
 -- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `USERS`
+--
+
+CREATE TABLE `USERS` (
+  `nombre` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `apellido` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `legajo` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `USERS`
+--
+
+INSERT INTO `USERS` (`nombre`, `apellido`, `email`, `legajo`) VALUES
+('Juan', 'Pérez', 'juan@example.com', 1),
+('María', 'López', 'maria@example.com', 2);
 
 --
 -- Índices para tablas volcadas
@@ -398,7 +416,11 @@ ALTER TABLE `formato`
 ALTER TABLE `materias`
   ADD PRIMARY KEY (`codigo`);
 
-
+--
+-- Indices de la tabla `USERS`
+--
+ALTER TABLE `USERS`
+  ADD PRIMARY KEY (`legajo`);
 
 
 --
