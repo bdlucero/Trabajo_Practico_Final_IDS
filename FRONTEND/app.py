@@ -443,6 +443,38 @@ def publicaciones():
         materias=materias,
     )
 
+@app.route("/cursos")
+@login_required
+def cursos():
+    user = session.get("user") 
+    materias = []
+    resenas = []
+
+    # Traer materias
+    try:
+        resp = requests.get(f"{BACKEND_URL}/api/materias", timeout=5)
+        resp.raise_for_status()
+        materias = resp.json()
+    except Exception as e:
+        print("Error al obtener materias para cursos:", e)
+
+    # Traer reseñas de cursos
+    try:
+        resp_r = requests.get(f"{BACKEND_URL}/api/resenas_cursos", timeout=5)
+        if resp_r.status_code == 200:
+            resenas = resp_r.json()
+        else:
+            print("Error al obtener reseñas de cursos:", resp_r.status_code, resp_r.text)
+    except Exception as e:
+        print("Error al llamar a /api/resenas_cursos:", e)
+
+    return render_template(
+        "cursos.html",
+        materias=materias,   
+        resenas=resenas,     
+        user=user,
+    )
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
