@@ -411,5 +411,38 @@ ALTER TABLE `materias`
 ALTER TABLE `formato`
   MODIFY `id_formato` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
+-- Estructura de tabla para la tabla `resena_publicacion`
 
+CREATE TABLE `resena_publicacion` (
+  `id_resena_publicacion` INT NOT NULL,
+  `id_usuario` INT NOT NULL,
+  `id_publicacion` INT NOT NULL,
+  `calificacion` INT NOT NULL,
+  `comentario` TEXT DEFAULT NULL,
+  `fecha_resena` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Indices de la tabla `formato`
+ALTER TABLE `resena_publicacion`
+  ADD PRIMARY KEY (`id_resena_publicacion`),
+  ADD KEY `idx_resena_usuario` (`id_usuario`),
+  ADD KEY `idx_resena_aporte` (`id_publicacion`);
+
+-- AUTO_INCREMENT de la tabla `resena_publicacion`
+
+ALTER TABLE `resena_publicacion`
+  MODIFY `id_resena_publicacion` INT NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `resena_publicacion`
+  ADD CONSTRAINT `fk_resena_usuario`
+  FOREIGN KEY (`id_usuario`)
+  REFERENCES `USERS`(`legajo`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `resena_publicacion`
+  ADD CONSTRAINT `fk_resena_aporte`
+  FOREIGN KEY (`id_publicacion`)
+  REFERENCES `publicaciones`(`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
