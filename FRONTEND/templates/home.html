@@ -13,11 +13,11 @@
 
 <body>
 
-    <main>
+<main>
 
 <section class="hero" style="text-align: center;">
-        <h1 class="mark">SkillMatch UBA</h1>
-        <p class="lead">Una plataforma colaborativa para conectar estudiantes de la UBA que ofrecen y buscan ayuda académica.</p>
+    <h1 class="mark">SkillMatch UBA</h1>
+    <p class="lead">Una plataforma colaborativa para conectar estudiantes de la UBA que ofrecen y buscan ayuda académica.</p>
 </section> 
 
 <section id="contenido-dinamico">
@@ -29,64 +29,59 @@
 </section>
 
 <section class="info">
-        <h2>      ¿De qué trata SkillMatch UBA?</h2>
-        <p class="lead">SkillMatch UBA permite publicar ofertas de ayuda, buscar por asignatura, leer reseñas de cursos y contactar a otros estudiantes. Está pensada para fomentar el intercambio de conocimientos dentro de la comunidad universitaria.</p>
+    <h2>      ¿De qué trata SkillMatch UBA?</h2>
+    <p class="lead">SkillMatch UBA permite publicar ofertas de ayuda, buscar por asignatura, leer reseñas de cursos y contactar a otros estudiantes. Está pensada para fomentar el intercambio de conocimientos dentro de la comunidad universitaria.</p>
 </section>
 
 <section class="funcionalidades" style="margin: 3rem 0;">
-    <h2 style="text-align: center;">¿Qué podés hacer en SkillMatch UBA?</h2>
-    <div class="layout" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: 2rem;">
+<h2 style="text-align: center;">¿Qué podés hacer en SkillMatch UBA?</h2>
+<div class="layout" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: 2rem;">
 
-        <div class="card2" style="width: 300px; text-align: center; padding: 1.5rem;">
-            <h3>   
-            <a href="{{ url_for('publicaciones') }}" style="text-decoration: none; color: inherit;">
+    <div class="card2" style="width: 300px; text-align: center; padding: 1.5rem;">
+        <h3>   
+        <a href="{{ url_for('publicaciones') }}" style="text-decoration: none; color: inherit;">
                     Publicar materiales
-                </a>     
-            </h3>           
-            <p class="desc">Subí apuntes, guías, consejos, resúmenes o ejercicios para que otros estudiantes puedan acceder fácilmente.</p>
-        </div>
+            </a>     
+        </h3>           
+        <p class="desc">Subí apuntes, guías, consejos, resúmenes o ejercicios para que otros estudiantes puedan acceder fácilmente.</p>
+    </div>
 
-        <div class="card2" style="width: 300px; text-align: center; padding: 1.5rem;">
-            <h3>
-            <a href="{{ url_for('buscar') }}" style="text-decoration: none; color: inherit;">
-                    Recibir apoyo en materias específicas
-                </a>
-            </h3>
+    <div class="card2" style="width: 300px; text-align: center; padding: 1.5rem;">
+        <h3>
+        <a href="{{ url_for('buscar') }}" style="text-decoration: none; color: inherit;">
+                Recibir apoyo en materias específicas
+            </a>
+        </h3>
             <p class="desc">Buscá ayuda personalizada en las materias que estás cursando, desde consultas teóricas hasta resolución de ejercicios.</p>
-        </div>
+    </div>
 
-        <div class="card2" style="width: 300px; text-align: center; padding: 1.5rem;">
-            <h3>  
+    <div class="card2" style="width: 300px; text-align: center; padding: 1.5rem;">
+        <h3>  
             <a href="{{ url_for('resenas') }}" style="text-decoration: none; color: inherit;">
                     Publicar / Recibir reseñas
-                </a> 
-            </h3>
+            </a> 
+        </h3>
             <p class="desc">Compartí tu experiencia con usuarios con los que te hayas relacionado y leé reseñas de otros estudiantes para elegir mejor.</p>
         </div>
     </div>
 </section>
 
 <section class="reseñas" style="text-align: center;">
-    <h3>Últimas reseñas de materias</h3>
-    <ul style="list-style: none; padding: 0; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+<h3>Últimas reseñas de materias</h3>
+<ul style="list-style: none; padding: 0; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
         {% for r in reseñas %}
-        <li class="card3 scalex" style="width: 280px;">
-            <!-- Título de la tarjeta = nombre de la materia -->
-            <h4>{{ r.nombre_materia }}</h4>
-
-            <!-- Dentro: título de reseña y texto separados -->
+    <li class="card3 scalex" style="width: 280px;">
+        <h4>{{ r.nombre_materia }}</h4>
             <p class="desc">
                 {% if r.titulo_resena %}
                     <strong>{{ r.titulo_resena }}</strong><br>
                 {% endif %}
                 {{ r.texto_resena }}
             </p>
-
-            <!-- Autor: por ahora siempre Anónimo -->
-            <span class="meta" style="display: block; text-align: right;">— Anónimo</span>
-        </li>
+        <span class="meta" style="display: block; text-align: right;">— Anónimo</span>
+    </li>
         {% endfor %}
-    </ul>
+</ul>
 </section>
 
 <section class="stats" style="text-align: center;">
@@ -140,10 +135,10 @@
 
 </section>
 
-    </main>
+</main>   
 
-    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
 
-    {% endblock %}
+{% endblock %}
 </body>
 </html>
