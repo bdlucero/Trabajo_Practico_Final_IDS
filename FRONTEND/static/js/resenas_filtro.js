@@ -1,78 +1,73 @@
-// static/js/resenas_filtro.js
-
- 
-function qs(selector, ctx) {
-  return (ctx || document).querySelector(selector);
-}
-
-function qsa(selector, ctx) {
-  return Array.from((ctx || document).querySelectorAll(selector));
-}
-
- 
 function normalizarTexto(s) {
-  return String(s || "")
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+    return String(s || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
 }
 
- 
 function updateMateriasCounter() {
-  const n = qsa("input[name='materias']:checked").length;
-  const el = qs(".materias-counter");
-  if (!el) return;
-  el.textContent = n ? `${n} seleccionada${n === 1 ? "" : "s"}` : "";
+    const selected = document.querySelectorAll("input[name='materias']:checked").length;
+    const counterEl = document.querySelector(".materias-counter");
+    if (!counterEl) return;
+
+    counterEl.textContent = selected
+        ? `${selected} seleccionada${selected === 1 ? "" : "s"}`
+        : "";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const searchForm   = qs("#searchForm");
-  const filtersForm  = qs("#filtersForm");
-  const materiaInput = qs("#materiaFilter");
 
+    const searchForm   = document.querySelector("#searchForm");
+    const filtersForm  = document.querySelector("#filtersForm");
+    const materiaInput = document.querySelector("#materiaFilter");
  
-  if (searchForm) {
- 
-  }
+    if (filtersForm) {
 
- 
-  if (filtersForm) {
-    qsa("input[name='materias']").forEach((cb) => {
-      cb.addEventListener("change", () => {
-        updateMateriasCounter();
-        filtersForm.submit();
-      });
-    });
-
- 
-    qsa(".filter-actions [data-action]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const marcar = btn.dataset.action === "all";
-        qsa("input[name='materias']").forEach((cb) => {
-          cb.checked = marcar;
+        document.querySelectorAll("input[name='materias']").forEach(cb => {
+            cb.addEventListener("change", () => {
+                updateMateriasCounter();
+                filtersForm.submit();
+            });
         });
-        updateMateriasCounter();
-        filtersForm.submit();
-      });
-    });
-  }
 
-  if (materiaInput) {
-    const aplicarFiltroListaMaterias = () => {
-      const termNorm = normalizarTexto(materiaInput.value);
-      qsa("#materiasList label").forEach((label) => {
-        const baseName =
-          label.dataset.name ||
-          (qs(".cklabel", label)?.textContent || label.textContent || "");
-        const nameNorm = normalizarTexto(baseName);
-        const mostrar = !termNorm || nameNorm.includes(termNorm);
-        label.style.display = mostrar ? "" : "none";
-      });
-    };
-    materiaInput.addEventListener("input", aplicarFiltroListaMaterias);
-    aplicarFiltroListaMaterias();
-  }
+        document.querySelectorAll(".filter-actions [data-action]").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const marcar = btn.dataset.action === "all";
 
+                document.querySelectorAll("input[name='materias']").forEach(cb => {
+                    cb.checked = marcar;
+                });
 
-  updateMateriasCounter();
+                updateMateriasCounter();
+                filtersForm.submit();
+            });
+        });
+    }
+
+    if (materiaInput) {
+
+        const aplicarFiltroListaMaterias = () => {
+            const termNorm = normalizarTexto(materiaInput.value);
+
+            document.querySelectorAll("#materiasList label").forEach(label => {
+
+                const baseName =
+                    label.dataset.name ||
+                    label.querySelector(".cklabel")?.textContent ||
+                    label.textContent ||
+                    "";
+
+                const nameNorm = normalizarTexto(baseName);
+
+                const visible = !termNorm || nameNorm.includes(termNorm);
+                label.style.display = visible ? "" : "none";
+            });
+        };
+
+        materiaInput.addEventListener("input", aplicarFiltroListaMaterias);
+
+        aplicarFiltroListaMaterias();
+    }
+
+    updateMateriasCounter();
 });
