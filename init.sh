@@ -16,6 +16,8 @@ source venv/bin/activate
 
 pip install --upgrade pip 
 
- pip install -r requirements.txt 
+pip install -r FrontEnd/requirementsback.txt
+
+pip install -r BackEnd/requirementsfront.txt
 
 echo "Entorno listo. Ejecutá: source venv/bin/activate" 

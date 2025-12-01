@@ -1,5 +1,6 @@
 from flask import Flask, Response, abort, render_template, redirect, url_for, request, session
 import os, requests
+from requests.exceptions import RequestException, Timeout, ConnectionError
 from functools import wraps
 from dotenv import load_dotenv
 load_dotenv()
@@ -61,17 +62,17 @@ def home():
 @app.route("/buscar", methods=["GET", "POST"])
 @login_required
 def buscar():
-    user = session.get("user") 
-    #  guardar reseña 
+    user = session.get("user")
 
+    # guardar reseña
     if request.method == "POST":
         pub_id = request.form.get("pub_id")
-        comentario = (request.form.get("comentario"))
-        calificacion = (request.form.get("calificacion"))
+        comentario = request.form.get("comentario")
+        calificacion = request.form.get("calificacion")
 
-        # Filtros 
-        q = (request.form.get("q"))
-        sort = (request.form.get("sort") or "-fecha")
+        # Filtros
+        q = request.form.get("q")
+        sort = request.form.get("sort") or "-fecha"
         page = request.form.get("page") or "1"
         page_size = request.form.get("page_size") or "12"
         materias_sel = request.form.getlist("materias")
@@ -91,11 +92,15 @@ def buscar():
                     timeout=10,
                 )
                 if resp.status_code != 201:
-                    print("Error al crear reseña:", resp.status_code, resp.text)
-            except Exception as e:
-                print("Error al llamar al backend de reseñas:", e)
+                    print("Error al crear reseña:")
+            except Timeout:
+                print("Timeout al llamar al backend")
+            except ConnectionError:
+                print("No se pudo conectar al backend")
+            except RequestException as e:
+                print("Error HTTP")
 
-        # vuelvo a buscar 
+        # vuelvo a buscar
         redirect_url = url_for(
             "buscar",
             q=q,
@@ -109,8 +114,8 @@ def buscar():
 
     # mostrar búsqueda + reseñas
 
-    q = (request.args.get("q"))
-    sort = (request.args.get("sort") or "-fecha")
+    q = request.args.get("q")
+    sort = request.args.get("sort") or "-fecha"
 
     try:
         page = max(int(request.args.get("page", 1)), 1)
@@ -125,16 +130,16 @@ def buscar():
     materias_sel = request.args.getlist("materias")
     formatos_sel = request.args.getlist("formato")
 
-    # Materias 
+    # Materias
     materias = []
     try:
         resp_m = requests.get(f"{BACKEND_URL}/api/materias", timeout=5)
         resp_m.raise_for_status()
         materias = resp_m.json()
-    except Exception as e:
-        print("Error al obtener materias del backend:", e)
+    except RequestException as e:
+        materias = []
 
-    # Parámetros 
+    # Parámetros
     api_params = {
         "q": q,
         "sort": sort,
@@ -163,11 +168,11 @@ def buscar():
         total = int(data.get("total", 0) or 0)
         page = int(data.get("page", page) or page)
         pages = int(data.get("pages", 1) or 1)
-    except Exception as e:
-        error = "No se pudieron cargar las publicaciones."
+    except RequestException as e:
+        error = "No se pudieron cargar las publicaciones"
 
     for p in resultados:
-        url = p.get("url")
+        url = p.get("url") or ""
         if url.startswith("/"):
             p["url"] = f"{BACKEND_URL}{url}"
             p["es_archivo_subido"] = "/uploads/" in url
@@ -184,8 +189,8 @@ def buscar():
                 )
                 if resp_r.status_code == 200:
                     p["resenas"] = resp_r.json() or []
-            except Exception as e:
-                print(f"Error al obtener reseñas de pub {pub_id}:", e)
+            except RequestException as e:
+                print("Error al obtener reseñas")
 
     return render_template(
         "busqueda.html",
@@ -213,11 +218,16 @@ def descargar_archivo():
 
     try:
         backend_resp = requests.get(file_url, stream=True, timeout=10)
-    except Exception as e:
+        backend_resp.raise_for_status()
+    except Timeout:
+        print("Timeout al descargar archivo")
         abort(502)
-
-    if backend_resp.status_code != 200:
-        abort(backend_resp.status_code)
+    except ConnectionError:
+        print("No se pudo conectar al backend para descargar el archivo")
+        abort(502)
+    except RequestException as e:
+        print("Error HTTP al descargar archivo")
+        abort(502)
 
     filename = file_url.rsplit("/", 1)[-1]
 
@@ -306,11 +316,12 @@ def registro():
 @app.route("/logout")
 def logout():
     session.clear()
-    return redirect(url_for("buscar"))
+    return redirect(url_for("registro"))
 
 @app.route("/resenas", methods=["GET", "POST"])
+@login_required
 def resenas():
-    user = session.get("user") or {}
+    user = session.get("user") 
 
     materias = []
     error = None
@@ -380,6 +391,7 @@ def resenas():
 
 
 @app.route('/publicaciones', methods=["GET", "POST"])
+@login_required
 def publicaciones():
     
     materias = []

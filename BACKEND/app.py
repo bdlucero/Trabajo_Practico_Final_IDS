@@ -1,11 +1,11 @@
 from flask import Flask, Blueprint
 from flask_cors import CORS
-from busqueda import busqueda_bp
-from home import home_bp
-from usuarios import usuarios_bp
-from publicaciones import publicaciones_bp
-from cursos import cursos_bp
-from resenas import resenas_bp
+from blueprints.busqueda import busqueda_bp
+from blueprints.home import home_bp
+from blueprints.usuarios import usuarios_bp
+from blueprints.publicaciones import publicaciones_bp
+from blueprints.cursos import cursos_bp
+from blueprints.resenas import resenas_bp
 
 def create_app() -> Flask:
     app = Flask(__name__)
