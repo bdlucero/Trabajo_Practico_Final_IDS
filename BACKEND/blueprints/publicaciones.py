@@ -32,7 +32,7 @@ def crear_publicacion():
             {"error": "Debe adjuntar un archivo o enviar un enlace (URL)"}
         ), 400
 
-    allowed_ext = {"pdf", "png"} 
+    allowed_ext = {"pdf", "png","zip"} 
 
     if archivo and archivo.filename:
         nombre_archivo = archivo.filename
