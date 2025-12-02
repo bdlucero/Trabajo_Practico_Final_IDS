@@ -398,8 +398,10 @@ def publicaciones():
         resp = requests.get(f"{BACKEND_URL}/api/materias", timeout=5)
         resp.raise_for_status()
         materias = resp.json()
-    except Exception as e:
-        print("Error al obtener materias del backend:", e)
+
+    except ConnectionError:
+        print("No se pudo conectar al backend para obtener las materias")
+        abort(502)  
 
     if request.method == "POST":
         form = request.form
